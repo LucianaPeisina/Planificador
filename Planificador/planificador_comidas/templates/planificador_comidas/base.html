@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block titulo %} base{% endblock %}</title>
+    <!-- Enlaza aquí los archivos CSS y JS -->
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Inicio</a></li>
+                <li><a href="{% url 'menu_semanal' %}">Menú Semanal</a></li>
+                <li><a href="{% url 'miembros' %}">Miembros</a></li>
+                <li><a href="{% url 'compras' %}">Compras</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Iniciar sesión</a></li>
+                    <li><a href="{% url 'registro' %}">Registro</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block contenido %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>
+            derechos reservados @2023
+        </p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'planificador_comidas/base.html' %}
+
+{% block titulo %}
+    Agregar Compra
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+
+{% block contenido %}
+   
+  <h2>Agregar compra</h2>
+  
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Agregar</button>
+  </form>
+
+{% endblock %}

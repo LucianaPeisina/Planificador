@@ -1,0 +1,26 @@
+{% extends 'planificador_comidas/base.html' %}
+
+{% block titulo %}
+    Miembro nuevo
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+
+{% block contenido %}
+
+
+
+
+{% block content %}
+  <h2>Agregar miembro</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Agregar</button>
+  </form>
+
+
+
+
+{% endblock %}
