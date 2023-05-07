@@ -1,4 +1,4 @@
-
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -32,10 +32,10 @@ class Compra(models.Model):
     TIPO_CHOICES = (
         ('F', 'Frescos'),
         ('S', 'Secos'),
-        ('E', 'Enlatados')
-        ('Fr', 'Frutas')
-        ('V', 'Verduras')
-        ('C', 'Carne'),
+        ('E', 'Enlatados'),
+        ('Fr', 'Frutas'),
+        ('V', 'Verduras'),
+        ('C', 'Carne')
     )
 
     CANTIDAD_CHOICES = (
@@ -53,3 +53,11 @@ class Compra(models.Model):
     tipo_cantidad = models.CharField(max_length=10, choices=CANTIDAD_CHOICES)
     extra = models.TextField(blank=True)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+
+
+
+class PerfilUsuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
