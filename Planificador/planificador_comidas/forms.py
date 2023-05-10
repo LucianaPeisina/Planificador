@@ -1,58 +1,55 @@
 from django import forms
-
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Menu, Miembro, Compra, PerfilUsuario
+from .models import Menu, Miembro, Compra, Perfil, ElementoCompra
+
 
 class MenuForm(forms.ModelForm):
+    miembro = forms.ModelMultipleChoiceField(queryset=Miembro.objects.all(), widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model = Menu
-        fields = ['fecha', 'dia_semana', 'hora', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'miembro', 'extra']
+        fields = ['fecha', 'dia_semana', 'hora', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'miembros', 'extra']
+
 
 class MiembroForm(forms.ModelForm):
     class Meta:
         model = Miembro
         fields = ['nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
 
+
 class CompraForm(forms.ModelForm):
     class Meta:
         model = Compra
-        fields = ['ingrediente', 'tipo', 'precio_aprox', 'cantidad', 'tipo_cantidad', 'extra', 'menu']
+        fields = ['fecha', 'menu', 'extra']
 
 
-class RegistroForm(forms.ModelForm):
-    username = forms.CharField(max_length=30, required=True)
+class RegistroForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput)
 
     class Meta:
-        model = PerfilUsuario
-        fields = ('comida_preferida', 'gustos', 'disgustos')
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("Este nombre de usuario ya está en uso")
-        return username
-
-
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
 
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Este correo electrónico ya está en uso")
-        if PerfilUsuario.objects.filter(user__email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está en uso")
         return email
 
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['cumpleanos', 'gustos', 'disgustos', 'extra']
 
-        if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.")
 
-        return cleaned_data
+
+class ElementoCompraForm(forms.ModelForm):
+    class Meta:
+        model = ElementoCompra
+        fields = ['ingrediente', 'tipo', 'precio_aprox', 'cantidad', 'tipo_cantidad', 'extra', 'compra']
+        widgets = {
+            'compra': forms.Select(attrs={'class': 'form-control'}),
+        }

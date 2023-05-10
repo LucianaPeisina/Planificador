@@ -62,26 +62,43 @@ def agregar_menu(request):
             menu = form.save(commit=False)
             menu.save()
             form.save_m2m()
-            return redirect('menu')
+            return redirect('menus')
     else:
         form = MenuForm()
-    return render(request, 'planificador_comidas/menu/agregar_menu.html', {'form': form})
+    return render(request, 'planificador_comidas/menus/agregar_menu.html', {'form': form})
 
 
 @login_required
 def editar_menu(request, pk):
     menu = get_object_or_404(Menu, pk=pk)
+
+    # Obtener todos los miembros relacionados con el menú actual
+    miembros_actuales = menu.miembros.all()
+
     if request.method == 'POST':
         form = MenuForm(request.POST, instance=menu)
+
+        # Si el formulario es válido, actualizar el menú y sus relaciones con los miembros
         if form.is_valid():
             menu = form.save(commit=False)
             menu.save()
-            form.save_m2m()
-            return redirect('menu')
+
+            # Obtener los miembros seleccionados en el formulario
+            miembros_nuevos = form.cleaned_data['miembros']
+
+            # Actualizar las relaciones del menú con los miembros seleccionados
+            for miembro in miembros_actuales:
+                if miembro not in miembros_nuevos:
+                    menu.miembros.remove(miembro)
+            for miembro in miembros_nuevos:
+                if miembro not in miembros_actuales:
+                    menu.miembros.add(miembro)
+
+            return redirect('menus')
     else:
         form = MenuForm(instance=menu)
-    return render(request, 'planificador_comidas/menu/editar_menu.html', {'form': form})
 
+    return render(request, 'planificador_comidas/menus/editar_menu.html', {'form': form})
 
 @login_required
 def eliminar_menu(request, pk):
@@ -101,7 +118,9 @@ def agregar_miembro(request):
     if request.method == 'POST':
         form = MiembroForm(request.POST)
         if form.is_valid():
-            form.save()
+            miembro = form.save(commit=False)
+            miembro.user = request.user
+            miembro.save()
             return redirect('miembros')
     else:
         form = MiembroForm()
@@ -139,7 +158,9 @@ def agregar_compra(request):
     if request.method == 'POST':
         form = CompraForm(request.POST)
         if form.is_valid():
-            form.save()
+            compra = form.save(commit=False)
+            compra.menu = form.cleaned_data['menu']
+            compra.save()
             return redirect('compras')
     else:
         form = CompraForm()
@@ -153,11 +174,14 @@ def editar_compra(request, pk):
         form = CompraForm(request.POST, instance=compra)
         if form.is_valid():
             compra = form.save(commit=False)
+            compra.menu = form.cleaned_data['menu']
             compra.save()
+
             return redirect('compras')
     else:
         form = CompraForm(instance=compra)
     return render(request, 'planificador_comidas/compras/editar_compra.html', {'form': form})
+
 
 def eliminar_compra(request, pk):
     compra = get_object_or_404(Compra, pk=pk)
