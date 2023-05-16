@@ -9,20 +9,20 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # Rutas para el menú semanal
-    path('menu_semanal/', views.menu_semanal, name='menu_semanal'),
-    path('menu_semanal/nuevo/', views.nuevo_menu, name='nuevo_menu'),
-    path('menu_semanal/<int:pk>/editar/', views.editar_menu, name='editar_menu'),
-    path('menu_semanal/<int:pk>/eliminar/', views.eliminar_menu, name='eliminar_menu'),
+    path('menu/', views.menu, name='menu'),
+    path('menu/nuevo/', views.nuevo_menu, name='agregar_menu'),
+    path('menu/<int:pk>/editar/', views.editar_menu, name='editar_menu'),
+    path('menu/<int:pk>/eliminar/', views.eliminar_menu, name='eliminar_menu'),
 
     # Rutas para los miembros de la familia
-    path('miembros/', views.lista_miembros, name='lista_miembros'),
-    path('miembros/nuevo/', views.nuevo_miembro, name='nuevo_miembro'),
+    path('miembros/', views.miembros, name='miembros'),
+    path('miembros/nuevo/', views.agregar_miembro, name='agregar_miembro'),
     path('miembros/<int:pk>/editar/', views.editar_miembro, name='editar_miembro'),
     path('miembros/<int:pk>/eliminar/', views.eliminar_miembro, name='eliminar_miembro'),
 
     # Rutas para las compras
-    path('compras/', views.lista_compras, name='lista_compras'),
-    path('compras/nuevo/', views.nueva_compra, name='nueva_compra'),
+    path('compras/', views.compras, name='compras'),
+    path('compras/nuevo/', views.agregar_compra, name='agregar_compra'),
     path('compras/<int:pk>/editar/', views.editar_compra, name='editar_compra'),
     path('compras/<int:pk>/eliminar/', views.eliminar_compra, name='eliminar_compra'),
 
