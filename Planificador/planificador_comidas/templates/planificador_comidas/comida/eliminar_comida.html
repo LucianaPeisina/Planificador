@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Eliminar Comida
+{% endblock %}
+
+{% block contenido %}
+    <h1> Eliminar </h1>
+    <form action="" method="post">{% csrf_token %}
+        <p>Quiere eliminar esta comida?</p>
+        <button class="btn btn-danger ml-2" type="submit">Confirmar</button>
+    </form>
+{% endblock contenido %}

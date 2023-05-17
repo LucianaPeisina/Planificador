@@ -1,28 +1,90 @@
 from django import forms
+from django. forms import ModelForm, DateInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .models import Menu, Miembro, Compra, Perfil, ElementoCompra
+from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
 
-
-class MenuForm(forms.ModelForm):
-    miembro = forms.ModelMultipleChoiceField(queryset=Miembro.objects.all(), widget=forms.CheckboxSelectMultiple)
-
-    class Meta:
-        model = Menu
-        fields = ['fecha', 'dia_semana', 'hora', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'miembros', 'extra']
-
+from django.forms import formset_factory
 
 class MiembroForm(forms.ModelForm):
     class Meta:
         model = Miembro
         fields = ['nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
+        
+ComidaMiembroFormSet = formset_factory(MiembroForm, extra=1)
+
+
+class ComidaForm(forms.ModelForm):
+    miembro = forms.ModelMultipleChoiceField(queryset=Miembro.objects.all(), widget=forms.CheckboxSelectMultiple)
+    extra = forms.CharField(required=False, widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "¿Ingrese cualquier extra"}))
+    miembros_formset = ComidaMiembroFormSet(prefix='miembros')
+
+    class Meta:
+        model = Comida
+        fields = ['inicio', 'fin', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'miembro', 'extra']
+
+        widgets = {
+            "titulo": forms.TextInput(
+                attrs={"class": "form-control", "placeholder": "Introduzca el titulo de la comida"}
+            ),
+            "descripcion": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Introduzca una descripcion",
+                }
+            ),
+            "ingredientes": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Introduzca los ingredientes",
+                }
+            ),
+            "inicio": DateInput(
+                attrs={"type": "datetime-local", "class": "form-control"},
+                format="%Y-%m-%dT%H:%M",
+            ),
+            "fin": DateInput(
+                attrs={"type": "datetime-local", "class": "form-control"},
+                format="%Y-%m-%dT%H:%M",
+            ),
+        }
+
+    def __init__(self, user, *args, **kwargs):
+        super(ComidaForm, self).__init__(*args, **kwargs)
+        self.fields["inicio"].input_formats = ("%Y-%m-%dT%H:%M",)
+        self.fields["fin"].input_formats = ("%Y-%m-%dT%H:%M",)
+        self.instance.user = user
+
+        if self.instance.pk:
+            # Si se está editando una comida existente, se preseleccionan los miembros asociados
+            self.fields['miembro'].initial = self.instance.miembro.all()
+
+        # Se muestra el campo extra si la comida está marcada como "extra"
+        if self.instance.extra:
+            self.fields['extra'].widget.attrs['style'] = ''
+        else:
+            self.fields['extra'].widget.attrs['style'] = 'display:none;'
+
+    def save(self, commit=True):
+        comida = super().save(commit=False)
+
+        # Actualizar la relación muchos a muchos con los miembros seleccionados
+        if commit:
+            comida.save()
+            comida.miembro.set(self.cleaned_data['miembro'])
+
+        return comida
+
+
 
 
 class CompraForm(forms.ModelForm):
+    comida = forms.ModelChoiceField(queryset=Comida.objects.all())
+
     class Meta:
         model = Compra
-        fields = ['fecha', 'menu', 'extra']
+        fields = ['fecha', 'comida', 'extra']
 
 
 class RegistroForm(UserCreationForm):

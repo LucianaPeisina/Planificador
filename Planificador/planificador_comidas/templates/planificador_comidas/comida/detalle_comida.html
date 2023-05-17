@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Detalles de la comida
+{% endblock %}
+
+{% block contenido %}
+    <div class="container">
+        <div class="clearfix">
+            <a class="btn btn-primary left" href="{% url 'calendarapp:calendar' %}"> Calendaior </a>
+            <a class="btn btn-info right mr-2" href="{% url 'calendarapp:comida_edit' comida.pk %}"> Editar Comida </a>
+        </div>
+
+        <div class="clearfix">
+            <h3>Nombre: {{ comida.titulo}}</h3>
+            <p>Desde <span style="color: gray;">{{ comida.inicio}}</span> Hasta <span style="color: gray;">{{ comida.fin}}</span></p>
+            <hr>
+            <p>{{ comida.descripcion }}</p>
+        </div>
+        <hr>
+        <div class="clearfix">
+            <h4 class="left" > Miembros de esta comida</h4>
+            <a class="btn btn-success right" href="{% url 'agregar_miembroComida' comida.id %}"> Incluir miembro </a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Nombre</th>
+                  <th>edad</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for miembro in miembroComida %}
+                <tr role="row">
+                    <td>{{ forloop.counter }}</td>
+
+                    <td>{{ miembro.nombre }}</td>
+                    <td>{{ miembro.edad }}</td>
+                    <td>
+                        <a class="btn btn-danger" href="{% url 'eliminar_comida' miembro.id %}">eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+        </table>
+    </div>
+{% endblock %}

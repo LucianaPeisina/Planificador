@@ -1,5 +1,9 @@
+from msilib.schema import ListView
 from django.contrib.auth.models import User
 from django.db import models
+from datetime import datetime
+from django.urls import reverse
+
 
 
 class Perfil(models.Model):
@@ -27,29 +31,73 @@ class Miembro(models.Model):
     def __str__(self):
         return self.nombre
     
+
+
+class ComidaManager(models.Manager):
+
+    def lista_comidas(self, user):
+        comidas = Comida.objects.filter(user=user, is_active=True, is_deleted=False)
+        return comidas
+
+    def obtener_running_comidas(self, user):
+        running_comidas = Comida.objects.filter(
+            user=user,
+            is_active=True,
+            is_deleted=False,
+            end_time__gte=datetime.now().date(),
+        ).order_by("start_time")
+        return running_comidas
     
-class Menu(models.Model):
-    miembros = models.ManyToManyField(Miembro, related_name='menus')
+    
+class ComidaAbs(models.Model):
+
+    is_active = models.BooleanField(default=True)
+    is_deleted = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Comida(ComidaAbs):
+
+    miembros = models.ManyToManyField(Miembro, related_name='comidas')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comidas")
+    titulo = models.CharField(max_length=200, unique=True)
+    descripcion= models.TextField()
     TIPO_CHOICES = (
         ('D', 'Desayuno'),
         ('A', 'Almuerzo'),
         ('C', 'Cena'),
     )
-    fecha = models.DateField()
-    dia_semana = models.CharField(max_length=20)
-    hora = models.TimeField()
     tipo = models.CharField(max_length=1, choices=TIPO_CHOICES)
-    titulo = models.CharField(max_length=50)
-    descripcion = models.TextField()
+    inicio = models.DateTimeField()
+    fin = models.DateTimeField()
+
+    objects = ComidaManager()
+
+    def __str__(self):
+        return self.titulo
+
+    def obtener_url(self):
+        return reverse("comida-detalles", args=(self.id,))
+    
     ingredientes = models.TextField()
     extra = models.TextField(blank=True)
     def __str__(self):
-        return f"{self.titulo} ({self.fecha})"
+        return f"{self.titulo}"
+    
+
+    @property
+    def obtener_html_url(self):
+        url = reverse("comida-detalles", args=(self.id,))
+        return f'<a href="{url}"> {self.titulo} </a>'
 
     
 class Compra(models.Model): 
     fecha = models.DateField()
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    Comida = models.ForeignKey(Comida, on_delete=models.CASCADE)
     extra = models.TextField(blank=True)
 
     def costo_total(self):

@@ -1,19 +1,12 @@
 {% extends 'planificador_comidas/base.html' %}
 
 {% block titulo %}
-    Menu
+    Agregar Comida
 {% endblock %}
 {% block encabezado %}
   
 {% endblock %}
 
 {% block contenido %}
-
-  <h2>Agregar menú</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Agregar</button>
-  </form>
-
+   
 {% endblock %}

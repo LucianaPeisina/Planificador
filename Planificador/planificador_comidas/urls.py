@@ -9,10 +9,13 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # Rutas para el menú semanal
-    path('menu/', views.menu, name='menu'),
-    path('menu/nuevo/', views.nuevo_menu, name='agregar_menu'),
-    path('menu/<int:pk>/editar/', views.editar_menu, name='editar_menu'),
-    path('menu/<int:pk>/eliminar/', views.eliminar_menu, name='eliminar_menu'),
+    path('comida/', views.comida, name='comida'),
+    path('comida/nuevo/', views.agregar_comida, name='agregar_comida'),
+    path('comida/<int:pk>/editar/', views.editar_comida, name='editar_comida'),
+    path('comida/<int:pk>/eliminar/', views.eliminar_comida, name='eliminar_comida'),
+    path("lista_comida/", views.TodasComidasListaView.as_view(), name="lista_comida"),
+    path("running-lista-comidas/", views.RunningListaComidasView.as_view(),name="running_comidas",),
+    path("comida/<int:comida_id>/detalles/", views.comida_detalles, name="comida-detalles"),
 
     # Rutas para los miembros de la familia
     path('miembros/', views.miembros, name='miembros'),
@@ -33,8 +36,15 @@ urlpatterns = [
     # Ruta para registrar un nuevo usuario
     path('registro/', views.registro, name='registro'),
     
-    # Ruta para eliminar un usuario
-    path('eliminar_usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+
+
+    path('', views.index, name='index'),
+    path('calendarioMenu/', views.calendario_menu, name='calendarioMenu'),
+    # Otras URL de tu aplicación
+
+
+    path("calendario/", views.CalendarioViewNuevo.as_view(), name="calendario"),
+    path("calendario/", views.CalendarioView.as_view(), name="calendarios"),
 
 
 ]
