@@ -15,7 +15,19 @@
   <title>Calendario de comidas</title>
 </head>
 <body>
+{% block extracss %}
+
+
+{% endblock extracss %}
+
   {% include 'planificador_comidas/navbar.html' %}
+  
+{% block titulo %}
+{% endblock %}
+
+{% block encabezado %}
+
+{% endblock %}
 
   {% block contenido %}
 
