@@ -27,9 +27,8 @@ class Miembro(models.Model):
     comida_preferida = models.CharField(max_length=150)
     gustos = models.TextField()
     disgustos = models.TextField()
-    extra = models.TextField(blank=True)
-    def __str__(self):
-        return self.nombre
+    extra= models.TextField()
+
     
 
 
@@ -139,9 +138,4 @@ class ElementoCompra(models.Model):
         return f"{self.ingrediente} - {self.cantidad} {self.tipo_cantidad}"
 
     
-    
-    
-    
-
-
-
+  

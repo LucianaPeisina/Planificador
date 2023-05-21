@@ -1,0 +1,27 @@
+<nav class="  navbar navbar-expand-lg navbar-light" style="background-color: #009688;">
+    <a class="navbar-brand" href="{% url 'index' %}" style="color: #fff;">Inicio</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'calendarioMenu' %}" style="color: #fff;">Calendario</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'miembros' %}" style="color: #fff;">Miembros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'compras' %}" style="color: #fff;">Compras</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'login' %}" style="color: #fff;">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'registro' %}" style="color: #fff;">Registro</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  

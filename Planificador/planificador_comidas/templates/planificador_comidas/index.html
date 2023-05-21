@@ -1,12 +1,113 @@
 {% extends 'planificador_comidas/base.html' %}
+{% load static %} 
 
 {% block titulo %}
-    index
+    ¡Bienvenido a su Calendario de Comidas!
 {% endblock %}
 {% block encabezado %}
   
 {% endblock %}
 
+
 {% block contenido %}
-   
+  <div class=" image-35negative-marging-top">
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1> Organice sus comidas y las de su familia</h1>
+          <h2> Logre planificar su menu semanal de manera ordenada y prolija</h2>
+          <div>
+            <a href="#Info" class="btn-get-started scrollto">¡Click aqui!</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img">
+
+          <img src="{% static '/img/enfermera-jeringa-dibujado-mano-2.png' %}" class="img-fluid animated" alt="">
+
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <main id="main">
+
+    <!-- ======= DATOS ======= -->
+    <section id="Info" class="Info">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <div class="col-lg-5 d-flex align-items-center justify-content-center about-img">
+            <img src="" class="img-fluid" alt="" data-aos="zoom-in">
+          </div>
+          <div class="col-lg-6 pt-5 pt-lg-0">
+            <h3 data-aos="fade-up">¿Vive solo?</h3>
+            <p data-aos="fade-up" data-aos-delay="100">
+           Sabemos el gran trabajo que conlleva el vivir solo, por eso con nuestro Calendario va a poder organizarse de la mejor manera.
+            Va a poder contar con horarios planificados de antemano, comidas que podra pensar desde antes y listas de compras para que no se le olvide nada.</p>
+            <div class="row">
+              <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <i class="bx bx-receipt"></i>
+                <h4>Familia</h4>
+                <p>¿Su familia es numerosa o se le dificulta hacer todo en el mismo día? ¡También tenemos la posibilidad de agregar varios miembros familiares! De esta manera  podra recordar
+                    cumpleaños, gustos, disgustos, fechas especiales y cualquier cosa que necesite, para que al momento de la comida sea todo mas ameno, rápido y sensillo.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======= FUNCUONES ======= -->
+    <section id="Funciones" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Funciones</h2>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bxl-dribbble"></i></div>
+              <h4 class="title"><a href="{% url 'calendarioMenu' %}">Calendario</a></h4>
+              <p class="description">Organice sus comidas con tiempo, podrá colocar desde horarios de comida hasta anotar si es una ocasión especial<br>
+                Planfiique sus comidas con antelación para no tener que preocuparse luego de "¿Que hago para comer?"
+            </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-file"></i></div>
+              <h4 class="title"><a href="{% url 'compras' %}">Lista de compras</a></h4>
+              <p class="description">¿Quiere hacer deliciosas comidas pero se le olvidan los ignredientes? ¡También puede hacer una lista de compras! Aproveche e incluso
+                saque un calculo aproximado de lo que tendra que pagar, teniendo la oportunidad de pensar en su billetera.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="miembros">Miembros</a></h4>
+              <p class="description">Puede sumar cuantos miembros quiera en el sistema, junto con su información útil, ¿Alguien es vegetario? ¿Alergico? Anotelo, y
+                tenga siempre a manos esas caracteristicas..</p>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </section>
+    
+        </section>
+      
+
+
 {% endblock %}
