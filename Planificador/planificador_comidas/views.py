@@ -12,6 +12,7 @@ from django.contrib.auth import login, authenticate
 from django.utils.safestring import mark_safe
 
 from .models import Comida, Miembro, Compra
+
 from .forms import ComidaForm, MiembroForm, CompraForm
 
 from django.shortcuts import render
@@ -136,7 +137,7 @@ def agregar_miembro(request):
         form = MiembroForm(request.POST)
         if form.is_valid():
             miembro = form.save(commit=False)
-            miembro.user = request.user
+           # miembro.user = request.user
             miembro.save()
             return redirect('miembros')
     else:
@@ -224,7 +225,7 @@ class RunningListaComidasView(ListView):
 #    def get_queryset(self):
  #       return Comida.objects.get_running_comidas(user=self.request.user)
 
-
+"""
 def get_fecha(req_day):
     if req_day:
         year, month = (int(x) for x in req_day.split("-"))
@@ -238,7 +239,7 @@ def prev_mes(d):
     mes = "mes=" + str(prev_mes.year) + "-" + str(prev_mes.mont)
     return mes
 
-
+  
 def sig_mes(d):
     days_in_mes = calendar.monthrange(d.year, d.month)[1]
     last = d.replace(day=days_in_mes)
@@ -297,3 +298,5 @@ class CalendarioViewNuevo( generic.View):
             return redirect("calendarioMenu")
         context = {"form": forms}
         return render(request, self.template_name, context)
+
+"""

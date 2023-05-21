@@ -1,12 +1,45 @@
-{% extends 'planificador_comidas/base.html' %}
+{% extends 'base/base.html' %}
+{% load static %} 
 
 {% block titulo %}
-    Miembros
-{% endblock %}
-{% block encabezado %}
-  
+Miembros
 {% endblock %}
 
-{% block contenido %}
-   
+
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/miembros.css' %}">
+{% endblock extracss %}
+{% block breadcrumb %}
+<h1>¡Estos son los miembros de la familia!</h1>    
+{% endblock breadcrumb %}
+{% block encabezado %}
+
 {% endblock %}
+{% block contenido %} 
+
+    <div class="miembros-container">
+       
+        <div class="miembro-card"> 
+            
+              <div class="miembro-avatar">
+                <!-- Coloca aquí la imagen de perfil o el logotipo -->
+              </div>
+              <div class="miembro-info">
+                <h3>Nombre {{ miembro.nombre }}</h3>
+                <p>Edad: {{ miembro.edad }}</p>
+                <p>Cumpleaños: {{ miembro.cumpleanos }}</p>
+                <p>Disgustos: {{ miembro.disgustos }}</p>
+                <p>Gustos: {{ miembro.gustos }}</p>
+                <p>Extra: {{ miembro.extra }}</p>
+              </div>
+              <div class="miembro-buttons">
+                <a href="" class="btn btn-danger">Eliminar</a>
+                <a href="" class="btn btn-primary">Editar</a>
+            </div>
+            
+          </div>
+          
+
+    </div>
+{% endblock %}
+
