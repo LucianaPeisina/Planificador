@@ -39,7 +39,7 @@ urlpatterns = [
 
 
     path('calendarioMenu/', views.calendario_menu, name='calendarioMenu'),
-    # Otras URL 
+    # Otras URL de tu aplicación
 
 
 #    path("calendario/", views.CalendarioViewNuevo.as_view(), name="calendario"),
