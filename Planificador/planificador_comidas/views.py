@@ -1,19 +1,20 @@
-from django.views.generic import ListView
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.http import HttpResponse
-from django.views import generic
-import calendar
+from calendar import month_name
 from datetime import timedelta, datetime, date
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login as auth_login
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
+from django.views import generic
+from django.views.generic import ListView
+
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm
 
 from .models import Comida, Miembro, Compra, ElementoCompra
 
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm
 
 from django.contrib import messages
 
@@ -45,35 +46,21 @@ def index(request):
 
 
 
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
+
+def login_view(request): 
+    if request.method == 'POST': 
+        username = request.POST['username'] 
+        password = request.POST['password'] 
+        user = authenticate(request, username=username, password=password) 
+        if user is not None: 
+            auth_login(request, user) 
+            return redirect('index') 
+        else: 
+            messages.error(request, 'Usuario o contraseña incorrectos') 
     return render(request, 'planificador_comidas/login.html')
 
 
 
-def registro(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            messages.success(request, f'¡Tu cuenta ha sido creada, {username}!')
-            login(request, user)
-            return redirect('login')
-            
-    else:
-        form = UserCreationForm()
-    return render(request, 'planificador_comidas/registro.html', {'form': form})
 
 #@login_required
 def comida(request):

@@ -3,17 +3,40 @@ from django.forms import BaseFormSet, ModelForm, DateInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import formset_factory
-
-
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
-
 from django.forms import formset_factory
+
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['class'] = 'form-control'
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect('index')
+            else:
+                messages.error(request, 'Usuario o contraseña incorrectos')
+    else:
+        form = LoginForm()
+    return render(request, 'planificador_comidas/login.html', {'form': form})
 
 
 class MiembroForm(forms.ModelForm):
     class Meta:
         model = Miembro
-        fields = ['nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
+        fields = ['perfil','nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'edad': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -22,6 +45,11 @@ class MiembroForm(forms.ModelForm):
             'disgustos': forms.Textarea(attrs={'class': 'form-control'}),
             'extra': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['perfil'].required = True
 
 ComidaMiembroFormSet = formset_factory(MiembroForm, formset=BaseFormSet, extra=1)
 class ComidaForm(forms.ModelForm):
@@ -93,24 +121,6 @@ class ComidaForm(forms.ModelForm):
         return comida
 
 
-class RegistroForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2')
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Este correo electrónico ya está en uso")
-        return email
-
-
-class PerfilForm(forms.ModelForm):
-    class Meta:
-        model = Perfil
-        fields = ['cumpleanos', 'gustos', 'disgustos', 'extra']
 
 
 class ElementoCompraForm(forms.ModelForm):
