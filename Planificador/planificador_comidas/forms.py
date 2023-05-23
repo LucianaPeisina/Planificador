@@ -3,12 +3,18 @@ from django.forms import BaseFormSet, ModelForm, DateInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import formset_factory
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
-from django.forms import formset_factory
+
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
 
 
+class PerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['cumpleanos', 'gustos', 'disgustos', 'extra']
 
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -16,21 +22,20 @@ class LoginForm(AuthenticationForm):
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['class'] = 'form-control'
 
-def login(request):
-    if request.method == 'POST':
-        form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                auth_login(request, user)
-                return redirect('index')
-            else:
-                messages.error(request, 'Usuario o contraseña incorrectos')
-    else:
-        form = LoginForm()
-    return render(request, 'planificador_comidas/login.html', {'form': form})
+    def login(self, request):
+        if request.method == 'POST':
+            form = self(data=request.POST)  # Corrige aquí, pasa request.POST directamente
+            if form.is_valid():
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password')
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
+                    auth_login(request, user)
+                    return redirect('index')  
+                else:
+                    form.add_error(None, 'Usuario o contraseña incorrectos')
+        else:
+            form = self()
 
 
 class MiembroForm(forms.ModelForm):

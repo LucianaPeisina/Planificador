@@ -12,9 +12,10 @@
 {% block contenido %} 
   
     <h2>Iniciar Sesión</h2> 
-    <form method="post"> 
+    <form method="post" action="{% url 'login' %}"> 
         {% csrf_token %} 
-        {{ form.as_p }} 
+        {{ form.username.label_tag }} {{ form.username }}<br>
+        {{ form.password.label_tag }} {{ form.password }}<br>
         <button type="submit">Iniciar Sesión</button> 
     </form> 
   

@@ -8,6 +8,11 @@ urlpatterns = [
     # Ruta para la página principal
     path('', views.index, name='index'),
 
+    #Rutas para Perfil
+
+    path('perfil/', views.perfil, name='perfil'),
+    path('editar_perfil/', views.editar_perfil, name='editar_perfil'),
+
     # Rutas para el menú semanal
     path('comida/', views.comida, name='comida'),
     path('comida/nuevo/', views.agregar_comida, name='agregar_comida'),
@@ -37,7 +42,9 @@ urlpatterns = [
 
 
     # Rutas para el inicio de sesión y cierre de sesión
-   path('login/', views.login_view, name='login'),
+
+    path('login/', views.login_view, name='login'),
+
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 

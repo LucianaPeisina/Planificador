@@ -1,6 +1,6 @@
 from calendar import month_name
 from datetime import timedelta, datetime, date
-
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
@@ -11,31 +11,16 @@ from django.utils.safestring import mark_safe
 from django.views import generic
 from django.views.generic import ListView
 
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm, PerfilForm
 
-from .models import Comida, Miembro, Compra, ElementoCompra
+
+from .models import Comida, Miembro, Compra, ElementoCompra, Perfil
 
 
 from django.contrib import messages
 
 # ...
 
-def registro(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
-            messages.success(request, f'¡Tu cuenta ha sido creada, {username}!')
-            login(request, user)
-            return redirect('login')
-        else:
-            messages.error(request, 'Por favor, corrige los errores en el formulario.')
-    else:
-        form = UserCreationForm()
-    return render(request, 'planificador_comidas/registro.html', {'form': form})
 
 
 def calendario_menu(request):
@@ -46,20 +31,76 @@ def index(request):
 
 
 
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)  # Utiliza la función `login` de Django en lugar de `auth_login`
+                return redirect('index')  
+            else:
+                form.add_error(None, 'Usuario o contraseña incorrectos')
+    else:
+        form = LoginForm()
+    return render(request, 'planificador_comidas/login.html', {'form': form})
 
-def login_view(request): 
-    if request.method == 'POST': 
-        username = request.POST['username'] 
-        password = request.POST['password'] 
-        user = authenticate(request, username=username, password=password) 
-        if user is not None: 
-            auth_login(request, user) 
-            return redirect('index') 
-        else: 
-            messages.error(request, 'Usuario o contraseña incorrectos') 
-    return render(request, 'planificador_comidas/login.html')
+def login_view(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user) 
+                return redirect('index')
+            else:
+                form.add_error(None, 'Usuario o contraseña incorrectos')
+    else:
+        form = LoginForm()
+    
+    return render(request, 'planificador_comidas/login.html', {'form': form})
+
+def registro(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(request, username=username, password=password)
+            messages.success(request, f'¡Tu cuenta ha sido creada, {username}!')
+            login(request, user)  # Llama directamente a la función login para iniciar sesión
+            return redirect('login')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
+    else:
+        form = UserCreationForm()
+    return render(request, 'planificador_comidas/registro.html', {'form': form})
 
 
+# ...
+
+#@login_required
+def editar_perfil(request):
+    perfil = request.user.perfil
+    if request.method == 'POST':
+        form = PerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            form.save()
+            return redirect('planificador_comidas:perfil')  
+    else:
+        form = PerfilForm(instance=perfil)
+    
+    return render(request, 'planificador_comidas/editar_perfil.html', {'form': form})
+
+#@login_required
+def perfil(request):
+    perfil = request.user.perfil
+    return render(request, 'planificador_comidas/perfil.html', {'perfil': perfil})
 
 
 #@login_required
