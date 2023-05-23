@@ -8,14 +8,33 @@ from django.http import HttpResponse
 from django.views import generic
 import calendar
 from datetime import timedelta, datetime, date
-from django.contrib.auth import login, authenticate
+
 from django.utils.safestring import mark_safe
 
 from .models import Comida, Miembro, Compra, ElementoCompra
 
 from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm
 
-from django.shortcuts import render
+from django.contrib import messages
+
+# ...
+
+def registro(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            messages.success(request, f'¡Tu cuenta ha sido creada, {username}!')
+            login(request, user)
+            return redirect('login')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
+    else:
+        form = UserCreationForm()
+    return render(request, 'planificador_comidas/registro.html', {'form': form})
 
 
 def calendario_menu(request):
@@ -71,6 +90,8 @@ def agregar_comida(request):
             comida.save()
             form.save_m2m()
             return redirect('comida')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = ComidaForm()
     return render(request, 'planificador_comidas/comida/agregar_comida.html', {'form': form})
@@ -180,10 +201,11 @@ def agregar_compra(request):
             compra.comida = form.cleaned_data['comida']
             compra.save()
             return redirect('compras')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = CompraForm()
     return render(request, 'planificador_comidas/compras/agregar_compra.html', {'form': form})
-
 
 #@login_required
 def editar_compra(request, pk):
@@ -236,6 +258,8 @@ def agregar_elemento(request, compra_pk):
             elemento.compra = compra
             elemento.save()
             return redirect('compras')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = ElementoCompraForm()
 
