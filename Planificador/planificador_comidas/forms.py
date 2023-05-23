@@ -13,7 +13,7 @@ from django.forms import formset_factory
 class MiembroForm(forms.ModelForm):
     class Meta:
         model = Miembro
-        fields = ['nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
+        fields = ['perfil','nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'edad': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -22,6 +22,11 @@ class MiembroForm(forms.ModelForm):
             'disgustos': forms.Textarea(attrs={'class': 'form-control'}),
             'extra': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['perfil'].required = True
 
 ComidaMiembroFormSet = formset_factory(MiembroForm, formset=BaseFormSet, extra=1)
 class ComidaForm(forms.ModelForm):
