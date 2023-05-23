@@ -21,7 +21,9 @@ class Perfil(models.Model):
 
 class Miembro(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='miembros')
-    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE)
+    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='miembros')
+
+
     nombre = models.CharField(max_length=50)
     edad = models.PositiveIntegerField()
     comida_preferida = models.CharField(max_length=150)

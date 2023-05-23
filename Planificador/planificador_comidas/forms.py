@@ -1,8 +1,9 @@
 from django import forms
-from django.forms import ModelForm, DateInput
+from django.forms import BaseFormSet, ModelForm, DateInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import formset_factory
+
 
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
 
@@ -13,11 +14,16 @@ class MiembroForm(forms.ModelForm):
     class Meta:
         model = Miembro
         fields = ['nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'edad': forms.NumberInput(attrs={'class': 'form-control'}),
+            'comida_preferida': forms.TextInput(attrs={'class': 'form-control'}),
+            'gustos': forms.Textarea(attrs={'class': 'form-control'}),
+            'disgustos': forms.Textarea(attrs={'class': 'form-control'}),
+            'extra': forms.Textarea(attrs={'class': 'form-control'}),
+        }
 
-
-ComidaMiembroFormSet = formset_factory(MiembroForm, extra=1)
-
-
+ComidaMiembroFormSet = formset_factory(MiembroForm, formset=BaseFormSet, extra=1)
 class ComidaForm(forms.ModelForm):
     miembro = forms.ModelMultipleChoiceField(queryset=Miembro.objects.all(), widget=forms.CheckboxSelectMultiple)
     extra = forms.CharField(required=False, widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "¿Ingrese cualquier extra"}))
