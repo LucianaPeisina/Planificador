@@ -45,16 +45,17 @@ def index(request):
 
 
 
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
+
+def login_view(request): 
+    if request.method == 'POST': 
+        username = request.POST['username'] 
+        password = request.POST['password'] 
+        user = authenticate(request, username=username, password=password) 
+        if user is not None: 
+            auth_login(request, user) 
+            return redirect('index') 
+        else: 
+            messages.error(request, 'Usuario o contraseña incorrectos') 
     return render(request, 'planificador_comidas/login.html')
 
 
