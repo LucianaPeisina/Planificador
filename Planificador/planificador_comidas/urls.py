@@ -37,7 +37,8 @@ urlpatterns = [
 
 
     # Rutas para el inicio de sesión y cierre de sesión
-    path('login/', LoginView.as_view(template_name='main/login.html'), name='login'),
+   path('login/', views.login_view, name='login'),
+
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 
     # Ruta para registrar un nuevo usuario
