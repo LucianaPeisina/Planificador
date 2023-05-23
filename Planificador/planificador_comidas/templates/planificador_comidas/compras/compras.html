@@ -24,7 +24,7 @@
         {% for elemento in compra.elementocompra_set.all %}
         <li>
           <div class="elemento-info">
-            <span>{{ elemento.ingrediente }}</span>
+            <span>Nombre: {{ elemento.ingrediente }}</span>
             <div class="icon-container">
               <a href="{% url 'eliminar_elemento' elemento.pk %}" class="action-button">
                 <i class="fas fa-trash-alt"></i>
@@ -35,8 +35,8 @@
             </div>
           </div>
           <div class="elemento-detalle">
-            <span>{{ elemento.cantidad }} {{ elemento.tipo_cantidad }}</span>
-            <span>{{ elemento.precio_aprox | floatformat:2 }}</span>
+            <span>Cantidad: {{ elemento.cantidad }} {{ elemento.tipo_cantidad }}</span>
+            <span>Costo: {{ elemento.precio_aprox | floatformat:2 }}</span>
           </div>
         </li>
         {% endfor %}
@@ -63,4 +63,3 @@
   </div>
   
 {% endblock %}
-

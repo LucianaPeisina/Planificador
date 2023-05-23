@@ -36,7 +36,14 @@ Miembros
     <a href="{% url 'eliminar_miembro' pk=miembro.pk %}" class="btn btn-danger">Eliminar</a>
     <a href="{% url 'editar_miembro' pk=miembro.pk %}" class="btn btn-primary">Editar</a>
     </div>
-  </div>
+
+  </div> 
+  
+  <a href="{% url 'agregar_miembro' %}" class="add-card">
+      <div class="add-icon">
+        <i class="fas fa-plus"></i>
+      </div>
+    </a>
   {% endfor %}
 </div>
 {% endblock %}

@@ -1,5 +1,3 @@
-
-
 {% extends 'base/base.html' %}
 
 {% load static %}
@@ -27,26 +25,22 @@
   </ul>
 {% endblock breadcrumb %}
 
-
 {% block contenido %}
 <div class="bodyC">
   <div class="container">
-  <div class="left">
-  <div class="today-date">
-    <div class="comida-day">{{ current_day }}</div>
-    <div class="comida-date">{{ current_date }}</div>
-  </div>
-  <div class="comidas">
-    {% for comida in comidas %}
-    <div class="comida">{{ comida.titulo }}</div>
-    {% endfor %}
-  </div>
-  
-  <div class="agregar-comida-header">
-    <div class="titulo">Agregar Comida</div>
-    <i class="fas fa-times close"></i>
-  </div>
-  <div class="agregar-comida-body">
+    <div class="left">
+      <div class="today-date">
+        <div class="comida-day"></div>
+        <div class="comida-date"></div>
+      </div>
+      <div class="comidas"></div>
+      
+      <div class="agregar-comida-wrapper">
+        <div class="agregar-comida-header">
+          <div class="titulo">Agregar Comida</div>
+          <i class="fas fa-times close"></i>
+        </div>
+        <div class="agregar-comida-body">
           <div class="agregar-comida-input">
             <input type="text" placeholder="Nombre" class="comida-name" />
           </div>
@@ -55,13 +49,6 @@
           </div>
           <div class="agregar-comida-input">
             <input type="text" placeholder="Hasta" class="comida-time-to" />
-          </div>
-          <div class="agregar-comida-input">
-            <select class="comida-tipo">
-              <option value="D">Desayuno</option>
-              <option value="A">Almuerzo</option>
-              <option value="C">Cena</option>
-            </select>
           </div>
           <div class="agregar-comida-input">
             <textarea placeholder="Descripción" class="comida-descripcion"></textarea>
@@ -76,18 +63,20 @@
             <textarea placeholder="Extra" class="comida-extra"></textarea>
           </div>
         </div>
-  <div class="agregar-comida-footer">
-    <button class="agregar-comida-btn">Agregar comida</button>
-  </div>
-<button class="agregar-comida">
-    <i class="fas fa-plus"></i>
-  </button>
-</div>
+        <div class="agregar-comida-footer">
+          <button class="agregar-comida-btn">Agregar comida</button>
+        </div>
+      </div>
+      
+      <button class="agregar-comida">
+        <i class="fas fa-plus"></i>
+      </button>
+    </div>
     <div class="right">
       <div class="calendar">
         <div class="month">
           <i class="fas fa-angle-left prev"></i>
-          <div class="date">{{ current_month }}</div>
+          <div class="date"></div>
           <i class="fas fa-angle-right next"></i>
         </div>
         <div class="weekdays">
@@ -99,25 +88,13 @@
           <div>Vie</div>
           <div>Sab</div>
         </div>
-        <div class="days">
-          {% for day in days %}
-            {% if day != 0 %}
-              {% if day == current_day and forloop.counter == 1 %}
-                <div class="day today">{{ day }}</div>
-              {% else %}
-                <div class="day">{{ day }}</div>
-              {% endif %}
-            {% else %}
-              <div class="day empty"></div>
-            {% endif %}
-          {% endfor %}
-          <div class="goto-today">
-            <div class="goto">
-              <input type="text" placeholder="mm/aaaaa" class="date-input" />
-              <button class="goto-btn">Ir</button>
-            </div>
-            <button class="today-btn">Hoy</button>
+        <div class="days"></div>
+        <div class="goto-today">
+          <div class="goto">
+            <input type="text" placeholder="mm/aaaaa" class="date-input" />
+            <button class="goto-btn">Ir</button>
           </div>
+          <button class="today-btn">Hoy</button>
         </div>
       </div>
     </div>
@@ -125,13 +102,10 @@
 </div>
 
 <script src="{% static 'calendario/main.js' %}"></script>
-
-{% endblock contenido %}
-
-{% block extrascripts %}
-
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
 crossorigin="anonymous"></script>
 <script src="{% static 'calendario/main.js' %}"></script>
-{% endblock extrascripts %}
+{% endblock contenido %}
 
+{% block extrascripts %}
+{% endblock extrascripts %}
