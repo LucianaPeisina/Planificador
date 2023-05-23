@@ -11,9 +11,9 @@ from datetime import timedelta, datetime, date
 from django.contrib.auth import login, authenticate
 from django.utils.safestring import mark_safe
 
-from .models import Comida, Miembro, Compra
+from .models import Comida, Miembro, Compra, ElementoCompra
 
-from .forms import ComidaForm, MiembroForm, CompraForm
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm
 
 from django.shortcuts import render
 
@@ -221,6 +221,47 @@ class RunningListaComidasView(ListView):
 
     template_name = "lista_comida.html"
     model = Comida
+
+
+
+# ...
+
+def agregar_elemento(request, compra_pk):
+    compra = get_object_or_404(Compra, pk=compra_pk)
+
+    if request.method == 'POST':
+        form = ElementoCompraForm(request.POST)
+        if form.is_valid():
+            elemento = form.save(commit=False)
+            elemento.compra = compra
+            elemento.save()
+            return redirect('compras')
+    else:
+        form = ElementoCompraForm()
+
+    return render(request, 'planificador_comidas/compras/agregar_elemento.html', {'form': form, 'compra': compra})
+
+def editar_elemento(request, compra_pk, elemento_pk):
+    compra = get_object_or_404(Compra, pk=compra_pk)
+    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
+
+    if request.method == 'POST':
+        form = ElementoCompraForm(request.POST, instance=elemento)
+        if form.is_valid():
+            elemento = form.save(commit=False)
+            elemento.compra = compra
+            elemento.save()
+            return redirect('compras')
+    else:
+        form = ElementoCompraForm(instance=elemento)
+
+    return render(request, 'planificador_comidas/compras/editar_elemento.html', {'form': form, 'compra': compra, 'elemento': elemento})
+
+def eliminar_elemento(request, compra_pk, elemento_pk):
+    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
+    elemento.delete()
+    return redirect('compras')
+
 
 #    def get_queryset(self):
  #       return Comida.objects.get_running_comidas(user=self.request.user)

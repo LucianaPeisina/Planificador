@@ -1,12 +1,28 @@
-{% extends 'planificador_comidas/base.html' %}
+{% extends 'base/base.html' %}
+{% load static %}
 
-{% block titulo %}
-    Editar Miembro
+{% block title %}
+Editar Miembro
 {% endblock %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/editar_miembro.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+<h1>Editar Miembro</h1>
+{% endblock breadcrumb %}
+
 {% block encabezado %}
-  
-{% endblock %}
+
+{% endblock encabezado %}
 
 {% block contenido %}
-   
-{% endblock %}
+<div class="editar-miembro-container">
+  <form method="POST" action="{% url 'editar_miembro' miembro.pk %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+  </form>
+</div>
+{% endblock contenido %}

@@ -1,26 +1,28 @@
-{% extends 'planificador_comidas/base.html' %}
+{% extends 'base/base.html' %}
+{% load static %}
 
 {% block titulo %}
-    Miembro nuevo
+Agregar Miembro
 {% endblock %}
+
+{% block extracss %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/miembros.css' %}">
+{% endblock extracss %}
+
+{% block breadcrumb %}
+<h1>Agregar Miembro</h1>
+{% endblock breadcrumb %}
+
 {% block encabezado %}
-  
-{% endblock %}
+
+{% endblock encabezado %}
 
 {% block contenido %}
-
-
-
-
-{% block content %}
-  <h2>Agregar miembro</h2>
-  <form method="POST">
+<div class="agregar-miembro-container">
+  <form method="POST" action="{% url 'agregar_miembro' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Agregar</button>
+    <button type="submit" class="btn btn-primary">Agregar Miembro</button>
   </form>
-
-
-
-
-{% endblock %}
+</div>
+{% endblock contenido %}

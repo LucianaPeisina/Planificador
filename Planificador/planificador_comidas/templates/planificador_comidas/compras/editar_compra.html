@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+{% load static %} 
+
+{% block titulo %}
+    Editar compra
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
+{% endblock extracss %}
+{% block breadcrumb %}
+
+  <h2>Editar Compra</h2>
+{% endblock breadcrumb %}
+
+{% block contenido %}
+
+
+  <form method="post" class="compra-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="action-button">Guardar</button>
+  </form>
+
+{% endblock %}

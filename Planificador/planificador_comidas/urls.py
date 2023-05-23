@@ -29,6 +29,13 @@ urlpatterns = [
     path('compras/<int:pk>/editar/', views.editar_compra, name='editar_compra'),
     path('compras/<int:pk>/eliminar/', views.eliminar_compra, name='eliminar_compra'),
 
+
+    # Rutas para elemento compra
+    path('compras/<int:compra_pk>/elementos/nuevo/', views.agregar_elemento, name='agregar_elemento'),
+    path('compras/<int:compra_pk>/elementos/<int:elemento_pk>/editar/', views.editar_elemento, name='editar_elemento'),
+    path('compras/<int:compra_pk>/elementos/<int:elemento_pk>/eliminar/', views.eliminar_elemento, name='eliminar_elemento'),
+
+
     # Rutas para el inicio de sesión y cierre de sesión
     path('login/', LoginView.as_view(template_name='main/login.html'), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
@@ -39,7 +46,7 @@ urlpatterns = [
 
 
     path('calendarioMenu/', views.calendario_menu, name='calendarioMenu'),
-    # Otras URL de tu aplicación
+
 
 
 #    path("calendario/", views.CalendarioViewNuevo.as_view(), name="calendario"),
@@ -47,3 +54,5 @@ urlpatterns = [
 
 
 ]
+
+

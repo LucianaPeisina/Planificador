@@ -1,13 +1,66 @@
-{% extends 'planificador_comidas/base.html' %}
+{% extends 'base/base.html' %}
+{% load static %} 
 
 {% block titulo %}
     Compras
 {% endblock %}
-{% block encabezado %}
-  
-{% endblock %}
-
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
+{% endblock extracss %}
+{% block breadcrumb %}
+<h1>Revisa tus listas de compras</h1>    
+{% endblock breadcrumb %}
 {% block contenido %}
-   
+<div class="compras-container">
+    {% for compra in compras %}
+    <div class="compra-card">
+      <div class="compra-info">
+        <h3>{{ compra }}</h3>
+        <div class="icon-container">
+          <i class="fas fa-fruit"></i>
+        </div>
+      </div>
+      <ul class="elementos-compra">
+        {% for elemento in compra.elementocompra_set.all %}
+        <li>
+          <div class="elemento-info">
+            <span>{{ elemento.ingrediente }}</span>
+            <div class="icon-container">
+              <a href="{% url 'eliminar_elemento' elemento.pk %}" class="action-button">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+              <a href="{% url 'editar_elemento' elemento.pk %}" class="action-button">
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+          <div class="elemento-detalle">
+            <span>{{ elemento.cantidad }} {{ elemento.tipo_cantidad }}</span>
+            <span>{{ elemento.precio_aprox | floatformat:2 }}</span>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="compra-total">
+        <span>Total:</span>
+        <span>{{ compra.costo_total | floatformat:2 }}</span>
+      </div>
+      <div class="compra-actions">
+        <a href="{% url 'eliminar_compra' compra.pk %}" class="action-button">
+          <i class="fas fa-trash-alt"></i> Eliminar
+        </a>
+        <a href="{% url 'editar_compra' compra.pk %}" class="action-button">
+          <i class="fas fa-edit"></i> Editar
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+    <a href="{% url 'agregar_compra' %}" class="compra-card add-card">
+      <div class="add-icon">
+        <i class="fas fa-plus"></i>
+      </div>
+    </a>
+  </div>
+  
 {% endblock %}
 

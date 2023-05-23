@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+{% load static %} 
+
+{% block titulo %}
+    Editar Elemento
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
+{% endblock extracss %}
+{% block breadcrumb %}
+
+  <h2>Editar Elemento</h2>
+{% endblock breadcrumb %}
+{% block content %}
+  <h1>Editar Elemento de Compra</h1>
+  <form method="POST" action="{% url 'editar_elemento' compra.pk elemento.pk %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit">Guardar cambios</button>
+  </form>
+{% endblock %}

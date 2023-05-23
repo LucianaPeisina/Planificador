@@ -96,7 +96,7 @@ class Comida(ComidaAbs):
     
 class Compra(models.Model): 
     fecha = models.DateField()
-    Comida = models.ForeignKey(Comida, on_delete=models.CASCADE)
+    comida = models.ForeignKey(Comida, on_delete=models.CASCADE)
     extra = models.TextField(blank=True)
 
     def costo_total(self):

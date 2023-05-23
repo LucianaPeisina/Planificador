@@ -1,45 +1,43 @@
 {% extends 'base/base.html' %}
-{% load static %} 
+{% load static %}
 
 {% block titulo %}
 Miembros
 {% endblock %}
 
-
 {% block extracss %}
+
   <link rel="stylesheet" type="text/css" href="{% static 'css/miembros.css' %}">
 {% endblock extracss %}
 {% block breadcrumb %}
+
 <h1>¡Estos son los miembros de la familia!</h1>    
 {% endblock breadcrumb %}
 {% block encabezado %}
 
 {% endblock %}
-{% block contenido %} 
 
-    <div class="miembros-container">
-       
-        <div class="miembro-card"> 
-            
-              <div class="miembro-avatar">
-                <!-- Coloca aquí la imagen de perfil o el logotipo -->
-              </div>
-              <div class="miembro-info">
-                <h3>Nombre {{ miembro.nombre }}</h3>
-                <p>Edad: {{ miembro.edad }}</p>
-                <p>Cumpleaños: {{ miembro.cumpleanos }}</p>
-                <p>Disgustos: {{ miembro.disgustos }}</p>
-                <p>Gustos: {{ miembro.gustos }}</p>
-                <p>Extra: {{ miembro.extra }}</p>
-              </div>
-              <div class="miembro-buttons">
-                <a href="" class="btn btn-danger">Eliminar</a>
-                <a href="" class="btn btn-primary">Editar</a>
-            </div>
-            
-          </div>
-          
-
+{% block contenido %}
+<div class="miembros-container">
+  {% for miembro in miembros %}
+    <div class="miembro-card">
+    <div class="miembro-avatar">
+    <!-- Aquí puedes mostrar la imagen de perfil o el logotipo del miembro -->
     </div>
+    <div class="miembro-info">
+    <h3>Nombre: {{ miembro.nombre }}</h3>
+    <p>Edad: {{ miembro.edad }}</p>
+    <p>Comida preferida: {{ miembro.comida_preferida }}</p>
+    <p>Gustos: {{ miembro.gustos }}</p>
+    <p>Disgustos: {{ miembro.disgustos }}</p>
+    <p>Extra: {{ miembro.extra }}</p>
+    </div>
+    <div class="miembro-buttons">
+    <a href="{% url 'eliminar_miembro' pk=miembro.pk %}" class="btn btn-danger">Eliminar</a>
+    <a href="{% url 'editar_miembro' pk=miembro.pk %}" class="btn btn-primary">Editar</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 {% endblock %}
 
