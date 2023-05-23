@@ -11,7 +11,7 @@ from django.utils.safestring import mark_safe
 from django.views import generic
 from django.views.generic import ListView
 
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, RegistroForm, LoginForm
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm
 
 from .models import Comida, Miembro, Compra, ElementoCompra
 
