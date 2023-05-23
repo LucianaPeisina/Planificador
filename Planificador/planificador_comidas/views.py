@@ -1,20 +1,20 @@
-from django.views.generic import ListView
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import authenticate, login as auth_login
-from django.contrib import messages
-from django.http import HttpResponse
-from django.views import generic
-import calendar
+from calendar import month_name
 from datetime import timedelta, datetime, date
 
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login as auth_login
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
+from django.views import generic
+from django.views.generic import ListView
+
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, RegistroForm, LoginForm
 
 from .models import Comida, Miembro, Compra, ElementoCompra
 
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm
 
 from django.contrib import messages
 
