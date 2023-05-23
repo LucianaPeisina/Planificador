@@ -51,6 +51,13 @@ class ComidaForm(forms.ModelForm):
                 attrs={"type": "datetime-local", "class": "form-control"},
                 format="%Y-%m-%dT%H:%M",
             ),
+            "tipo": forms.Select(attrs={"class": "form-control"}),
+            "extra": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Introduzca cualquier extra",
+                }
+            ),
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -78,8 +85,6 @@ class ComidaForm(forms.ModelForm):
             comida.miembro.set(self.cleaned_data['miembro'])
 
         return comida
-
-
 
 
 class RegistroForm(UserCreationForm):

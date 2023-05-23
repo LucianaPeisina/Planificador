@@ -33,13 +33,19 @@ agregarComidaCloseBtn.addEventListener("click", () => {
   agregarComidaWrapper.style.display = "none";
 });
 
+
 // Función para agregar una comida
 function addComida() {
   const name = comidaNameInput.value.trim();
   const timeFrom = comidaTimeFromInput.value.trim();
   const timeTo = comidaTimeToInput.value.trim();
+  const tipo = comidaTipoInput.value;
+  const descripcion = comidaDescripcionInput.value.trim();
+  const ingredientes = comidaIngredientesInput.value.trim();
+  const miembro = comidaMiembroInput.value.trim();
+  const extra = comidaExtraInput.value.trim();
 
-  if (name !== "" && timeFrom !== "" && timeTo !== "") {
+  if (name !== "" && timeFrom !== "" && timeTo !== "" && tipo !== "") {
     // Crear el elemento de comida
     const comidaElement = document.createElement("div");
     comidaElement.className = "comida";
@@ -52,11 +58,18 @@ function addComida() {
     comidaNameInput.value = "";
     comidaTimeFromInput.value = "";
     comidaTimeToInput.value = "";
+    comidaTipoInput.value = "";
+    comidaDescripcionInput.value = "";
+    comidaIngredientesInput.value = "";
+    comidaMiembroInput.value = "";
+    comidaExtraInput.value = "";
 
     // Ocultar el formulario de agregar comida
     agregarComidaWrapper.style.display = "none";
   }
 }
+
+
 
 // Agregar listener al botón de agregar comida
 agregarComidaBtn.addEventListener("click", addComida);
