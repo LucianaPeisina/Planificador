@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.forms import formset_factory
 
 
+from django.contrib import messages
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
 
 from django.forms import formset_factory
@@ -111,6 +112,19 @@ class RegistroForm(UserCreationForm):
             raise forms.ValidationError("Este correo electrónico ya está en uso")
         return email
 
+def registro(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Tu cuenta ha sido creada exitosamente, {username}!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
+    else:
+        form = RegistroForm()
+    return render(request, 'planificador_comidas/registro.html', {'form': form})
 
 class PerfilForm(forms.ModelForm):
     class Meta:
