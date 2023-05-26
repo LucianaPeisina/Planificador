@@ -42,15 +42,14 @@ urlpatterns = [
 
 
     # Rutas para el inicio de sesión y cierre de sesión
-
-    path('login/', views.login_view, name='login'),
-
+    # path('login/', views.login_view, name='login'),
+    path('login/', views.login_request, name='login'),
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 
     # Ruta para registrar un nuevo usuario
     path('registro/', views.registro, name='registro'),
-    
+     
 
 
     path('calendarioMenu/', views.calendario_menu, name='calendarioMenu'),
