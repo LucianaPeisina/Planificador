@@ -3,8 +3,8 @@ from datetime import timedelta, datetime, date
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
+from django.contrib.auth import authenticate, login , logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
@@ -18,7 +18,7 @@ from .models import Comida, Miembro, Compra, ElementoCompra, Perfil
 
 
 from django.contrib import messages
-
+from .forms import AltaUsuarioForm
 # ...
 
 
@@ -31,55 +31,54 @@ def index(request):
 
 
 
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)  # Utiliza la función `login` de Django en lugar de `auth_login`
-                return redirect('index')  
-            else:
-                form.add_error(None, 'Usuario o contraseña incorrectos')
-    else:
-        form = LoginForm()
-    return render(request, 'planificador_comidas/login.html', {'form': form})
+def registro(request):     
+    if request.method == "POST":
+        alta_usuario_form = AltaUsuarioForm(request.POST)
+        if alta_usuario_form.is_valid():
+            user = alta_usuario_form.save(commit=False)
+            user.save()  #guardamos el usuario
 
-def login_view(request):
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user) 
-                return redirect('index')
-            else:
-                form.add_error(None, 'Usuario o contraseña incorrectos')
+            messages.add_message(request, messages.SUCCESS, 'Usuario dado de alta con éxito', extra_tags="tag1")
+             
+            login(request,user)
+            messages.add_message(request, messages.SUCCESS, 'Ha iniciado sesion como: ' + alta_usuario_form.cleaned_data.get('username'), extra_tags="tag1")
+                              
+            return render(request, 'planificador_comidas/index.html')
     else:
-        form = LoginForm()
+        # GET
+        alta_usuario_form = AltaUsuarioForm()
     
-    return render(request, 'planificador_comidas/login.html', {'form': form})
+    context = {
+        'form': alta_usuario_form
+    }
 
-def registro(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+    return render(request, 'planificador_comidas/registro.html',context) 
+
+
+############    LOGIN / LOGOUT  #####################
+
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data= request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
-            user = authenticate(request, username=username, password=password)
-            messages.success(request, f'¡Tu cuenta ha sido creada, {username}!')
-            login(request, user)  # Llama directamente a la función login para iniciar sesión
-            return redirect('login')
-        else:
-            messages.error(request, 'Por favor, corrige los errores en el formulario.')
-    else:
-        form = UserCreationForm()
-    return render(request, 'planificador_comidas/registro.html', {'form': form})
+            usuario =form.cleaned_data.get('username')
+            contraseña= form.cleaned_data.get('password')
+            user= authenticate(username=usuario, password=contraseña)
+
+            if user is not None:
+                login(request,user)
+                messages.info(request, f"Ha iniciado sesion como: {usuario}")
+                return render(request, 'planificador_comidas/index.html')
+
+    form = AuthenticationForm()
+    return render(request, 'planificador_comidas/login.html',{"form": form}) 
+
+##
+def logout_request(request):
+    logout(request)
+    messages.info(request,"Sesion finalizada")
+    return render(request, 'planificador_comidas/index.html') 
+
 
 
 # ...
