@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block titulo %} 
+    Fin de Sesión 
+{% endblock %} 
+
+{% block encabezado %} 
+    
+{% endblock %} 
+  
+{% block contenido %} 
+  
+    <h2>Terminar Sesión</h2> 
+    <form method="post" action="{% url 'logout' %}"> 
+        {% csrf_token %} 
+        {{ form.as_p }} 
+        <button type="submit">Terminar Sesión</button> 
+    </form> 
+  
+{% endblock %}
