@@ -19,14 +19,11 @@ from django.contrib import messages
 from .forms import AltaUsuarioForm
 # ...
 
-
 def calendario_menu(request):
     return render(request, 'planificador_comidas/calendarioMenu.html')
 
 def index(request):
     return render(request, 'planificador_comidas/index.html')
-
-
 
 def registro(request):     
     if request.method == "POST":
@@ -75,8 +72,6 @@ def logout_request(request):
     logout(request)
     messages.info(request,"Sesion finalizada")
     return render(request, 'planificador_comidas/index.html') 
-
-
 
 # ...
 

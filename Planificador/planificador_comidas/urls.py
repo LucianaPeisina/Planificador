@@ -44,6 +44,7 @@ urlpatterns = [
     # Rutas para el inicio de sesión y cierre de sesión
     # path('login/', views.login_view, name='login'),
     path('login/', views.login_request, name='login'),
+    #path('logout/', views.logout_request, name='logout'),
 
     path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 
