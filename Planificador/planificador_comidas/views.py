@@ -11,16 +11,13 @@ from django.utils.safestring import mark_safe
 from django.views import generic
 from django.views.generic import ListView
 
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm, PerfilForm
-
-
+#from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm, PerfilForm
+from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, PerfilForm
 from .models import Comida, Miembro, Compra, ElementoCompra, Perfil
-
 
 from django.contrib import messages
 from .forms import AltaUsuarioForm
 # ...
-
 
 
 def calendario_menu(request):

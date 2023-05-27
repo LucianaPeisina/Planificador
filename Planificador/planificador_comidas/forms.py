@@ -7,7 +7,7 @@ from django.contrib import messages
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
 
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login as auth_login
+#from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
 
 # Descripcion 
@@ -24,28 +24,28 @@ from django.shortcuts import render, redirect
 
 # CompraForm: Este formulario está vinculado al modelo Compra y se utiliza para crear o actualizar compras. Los campos del formulario son fecha, comida y extra. El formulario también incluye un conjunto de formularios ElementoCompraFormSet que permite agregar múltiples elementos de compra a la compra principal.
 
-class LoginForm(AuthenticationForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     self.fields['username'].widget.attrs['class'] = 'form-control'
-    #     self.fields['password'].widget.attrs['class'] = 'form-control'
+# class LoginForm(AuthenticationForm):
+#     # def __init__(self, *args, **kwargs):
+#     #     super().__init__(*args, **kwargs)
+#     #     self.fields['username'].widget.attrs['class'] = 'form-control'
+#     #     self.fields['password'].widget.attrs['class'] = 'form-control'
 
-    def login(request):
-        messages.error(request, 'F login')
-        if request.method == 'POST':
-                form = LoginForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                auth_login(request, user)
-                return redirect('indexZ')
-            else:
-                messages.error(request, 'Usuario o contraseña incorrectos')
-        else:
-            form = LoginForm()
-        return render(request, 'planificador_comidas/login.html', {'form': form})
+#     def login(request):
+#         messages.error(request, 'F login')
+#         if request.method == 'POST':
+#                 form = LoginForm(request, data=request.POST)
+#         if form.is_valid():
+#             username = form.cleaned_data.get('username')
+#             password = form.cleaned_data.get('password')
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 auth_login(request, user)
+#                 return redirect('indexZ')
+#             else:
+#                 messages.error(request, 'Usuario o contraseña incorrectos')
+#         else:
+#             form = LoginForm()
+#         return render(request, 'planificador_comidas/login.html', {'form': form})
 
 class AltaUsuarioForm(UserCreationForm):
 
