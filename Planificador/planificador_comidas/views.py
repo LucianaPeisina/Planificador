@@ -274,7 +274,7 @@ def agregar_elemento(request, compra_pk):
             return redirect('editar_compra', compra_pk=compra_pk)
     else:
         form = ElementoCompraForm()
-    return render(request, 'agregar_elemento.html', {'form': form})
+    return render(request, 'agregar_elemento.html', {'form': form, 'compra':compra})
 
 
 def editar_elemento(request, compra_pk, elemento_pk):
