@@ -196,6 +196,7 @@ class ElementoCompraForm(forms.ModelForm):
         }
         
 ElementoCompraFormSet = formset_factory(ElementoCompraForm, extra=1)
+
 class CompraForm(forms.ModelForm):
     comida = forms.ModelChoiceField(queryset=Comida.objects.all(), required=False, empty_label="Sin comida")
     fecha = forms.DateField(
@@ -212,24 +213,3 @@ class CompraForm(forms.ModelForm):
     class Meta:
         model = Compra
         fields = ['fecha', 'comida', 'extra']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.elemento_compra_formset = ElementoCompraFormSet(prefix='elementos')
-
-    def is_valid(self):
-        form_valid = super().is_valid()
-        formset_valid = self.elemento_compra_formset.is_valid()
-        return form_valid and formset_valid
-
-    def save(self, commit=True):
-        compra = super().save(commit=False)
-        if commit:
-            compra.save()
-
-            for form in self.elemento_compra_formset:
-                elemento_compra = form.save(commit=False)
-                elemento_compra.compra = compra
-                elemento_compra.save()
-
-        return compra

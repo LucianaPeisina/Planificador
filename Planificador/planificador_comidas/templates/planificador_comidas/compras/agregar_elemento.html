@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block titulo %}
-    Agregar/Editar compra
+    Agregar elemento de compra
 {% endblock %}
 {% block encabezado %}
 
@@ -11,21 +11,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
 {% endblock extracss %}
 {% block breadcrumb %}
-    <h2>Agregar/Editar compra</h2>
+    <h2>Agregar elemento de compra</h2>
 {% endblock breadcrumb %}
 
 {% block contenido %}
-    <form method="post" class="compra-form" action="{% url 'editar_compra' compra.pk %}">
+    <form method="post" class="elemento-form" action="{% url 'agregar_elemento' compra.pk %}">
         {% csrf_token %}
         {{ form.as_p }}
 
         <button type="submit">Guardar</button>
     </form>
-    <a href="{% url 'agregar_elemento' compra.pk %}" class="agregar-elemento-btn">Agregar Elemento</a>
-
 {% endblock %}
-
-
-{% block extrascripts %}
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{% endblock extrascripts %}
