@@ -200,12 +200,12 @@ ElementoCompraFormSet = formset_factory(ElementoCompraForm, extra=1)
 class CompraForm(forms.ModelForm):
     comida = forms.ModelChoiceField(queryset=Comida.objects.all(), required=False, empty_label="Sin comida")
     fecha = forms.DateField(
-        initial=date(1900, 1, 1),
+        initial=date(2023, 5, 30),
         widget=forms.DateInput(
             attrs={
                 'type': 'date',
-                'max': (date.today() - timedelta(days=45 * 365)).strftime('%Y-%m-%d'),
-                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+                'max': (date.today() - timedelta(days=0 * 365)).strftime('%Y-%m-%d'),
+                'min': date(2023, 1, 1).strftime('%Y-%m-%d'),
             }
         )
     )
