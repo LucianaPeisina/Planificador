@@ -250,12 +250,12 @@ def editar_compra(request, pk):
     if request.method == 'POST':
         form = CompraForm(request.POST, instance=compra)
         if form.is_valid():
-            compra=        form.save()
+            compra=  form.save()
             compra.save
             return redirect('compras')
     else:
         form = CompraForm(instance=compra)
-    return render(request, 'planificador_comidas/compras/editar_compra.html', {'form': form})
+    return render(request, 'planificador_comidas/compras/editar_compra.html', {'form': form, 'compra':compra})
 
 def eliminar_compra(request, pk):
     compra = get_object_or_404(Compra, pk=pk)
