@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('perfil/', views.perfil, name='perfil'),
     path('editar_perfil/', views.editar_perfil, name='editar_perfil'),
+    path('listado_perfiles/', views.listado_perfiles, name="listado_perfiles"),
 
     # Rutas para el menú semanal
     path('comida/', views.comida, name='comida'),

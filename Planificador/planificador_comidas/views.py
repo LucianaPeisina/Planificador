@@ -76,8 +76,6 @@ def logout_request(request):
 # ...
 
 #@login_required
-
-
 def editar_perfil(request):
     perfil = Perfil.objects.get(user=request.user)
 
@@ -98,6 +96,15 @@ def perfil(request):
     perfil = request.user.perfil
     return render(request, 'planificador_comidas/perfil/perfil.html', {'perfil': perfil})
 
+#@login_required
+def listado_perfiles(request):
+    context = {}
+
+    listado = Perfil.objects.all().order_by('id')
+
+    context['listado_perfiles'] = listado
+
+    return render(request, 'planificador_comidas/perfil/listado_perfiles.html', context)
 
 #@login_required
 def comida(request):

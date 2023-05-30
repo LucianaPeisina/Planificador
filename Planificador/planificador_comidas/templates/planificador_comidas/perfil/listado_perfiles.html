@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+{% load static %} 
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'planificador_comidas/css/listar_perfiles.css' %}">
+{% endblock %}
+
+{% block titulo %}
+    Listado Perfiles
+{% endblock %}
+
+{% block encabezado %}
+<h1>Planificador</h1>
+<h2>Listado de Perfiles</h2>
+{% endblock %}
+
+
+{% block contenido %}
+<section class="listado">
+    {% for perfil in listado_perfiles %}
+        <article>
+            <p><b>Username</b>: {{ perfil.user.username}}</p>
+            <p><b>Nombre</b>: {{ perfil.user.first_name}}</p>
+            <p><b>Apellido</b>: {{perfil.user.last_name}}</p>
+            <p><b>mail</b>: {{perfil.user.email}}</p>
+            <p><b>Fecha nacimiento</b>: {{perfil.cumpleanos}}</p>
+            <p><b>mail</b>: {{perfil.user.email}}</p>
+            <p><b>--------------------------------------</b></p>
+        </article>
+    {% empty %}
+    
+    {% endfor %}
+</section>
+{% endblock %}
+
+
