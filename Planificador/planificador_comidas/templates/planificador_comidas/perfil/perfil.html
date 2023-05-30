@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% load static %} 
+
+{% block titulo %}
+    Perfil
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+
+
+{% block contenido %}
+<div class="perfils-container">
+    <div class="perfil-card">
+
+        <div class="perfil-info">
+            <h2>{{ perfil.user.username }}</h2>
+            <p class="perfil-datos">Fecha de nacimiento: {{ perfil.cumpleanos }}</p>
+            <p class="perfil-datos">Gustos: {{ perfil.gustos }}</p>
+            <p class="perfil-datos">Disgustos: {{ perfil.disgustos }}</p>
+            <p class="perfil-datos">Información adicional: {{ perfil.extra }}</p>
+        </div>
+    </div> 
+
+    <a href="{% url 'editar_perfil' %}" class="add-card">
+        <div class="add-icon">
+            <i class="fas fa-edit"></i>
+        </div>
+        <p class="add-text">Editar perfil</p>
+    </a>
+</div>
+{% endblock %}
+

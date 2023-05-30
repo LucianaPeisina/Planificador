@@ -14,7 +14,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class Perfil(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     cumpleanos = models.DateField(null=True, blank=True)
     gustos = models.TextField(blank=True)
     disgustos = models.TextField(blank=True)
@@ -30,16 +31,15 @@ def save_user_profile(sender, instance, **kwargs):
     instance.perfil.save()
 
 class Miembro(models.Model):
+    id = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='miembros')
-    perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='miembros')
-
-
+    cumpleanos = models.DateField(default=datetime.today)
     nombre = models.CharField(max_length=50)
     edad = models.PositiveIntegerField()
     comida_preferida = models.CharField(max_length=150)
     gustos = models.TextField()
     disgustos = models.TextField()
-    extra= models.TextField()
+    extra = models.TextField()
 
     
 
@@ -83,8 +83,11 @@ class Comida(ComidaAbs):
         ('C', 'Cena'),
     )
     tipo = models.CharField(max_length=1, choices=TIPO_CHOICES)
-    inicio = models.DateTimeField()
-    fin = models.DateTimeField()
+    fecha = models.DateField(default=datetime.today)
+
+
+    inicio = models.TimeField()
+    fin = models.TimeField()
 
     objects = ComidaManager()
 
@@ -108,7 +111,7 @@ class Comida(ComidaAbs):
     
 class Compra(models.Model): 
     fecha = models.DateField()
-    comida = models.ForeignKey(Comida, on_delete=models.CASCADE)
+    comida = models.ForeignKey(Comida, on_delete=models.CASCADE, null=True)
     extra = models.TextField(blank=True)
 
     def costo_total(self):
@@ -120,7 +123,7 @@ class Compra(models.Model):
     
 
 class ElementoCompra(models.Model):
-    compra = models.ForeignKey('Compra', on_delete=models.CASCADE)
+    compra = models.ForeignKey('Compra', on_delete=models.CASCADE, null=True)
     
     TIPO_CHOICES = (
         ('F', 'Frescos'),

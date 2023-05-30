@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% load static %} 
+
+{% block titulo %}
+    Editar Perfil
+{% endblock %}
+{% block encabezado %}
+  
+{% endblock %}
+{% block extracss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/perfil.css' %}">
+{% endblock extracss %}
+{% block breadcrumb %}
+
+  <h2>Editar Perfil</h2>
+{% endblock breadcrumb %}
+
+{% block contenido %}
+<div class="container">
+    <form action="{% url 'editar_perfil' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <input type="submit" value="Save">
+    </form>
+</div>
+{% endblock %}
+

@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from django import forms
 from django.forms import BaseFormSet, ModelForm, DateInput
 from django.contrib.auth.forms import UserCreationForm
@@ -71,15 +72,40 @@ class AltaUsuarioForm(UserCreationForm):
 
 
 class PerfilForm(forms.ModelForm):
+    gustos = forms.CharField(label='Gustos: ')
+    disgustos = forms.CharField(label='Disgustos:')
+    extra = forms.CharField(label='Extra:')
+    cumpleanos = forms.DateField(
+        initial=date(1900, 1, 1),
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'max': (date.today() - timedelta(days=18*365)).strftime('%Y-%m-%d'),
+                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+                
+            }
+        )
+    )
     class Meta:
         model = Perfil
         fields = ['cumpleanos', 'gustos', 'disgustos', 'extra']
 
 
 class MiembroForm(forms.ModelForm):
+    cumpleanos = forms.DateField(
+        initial=date(1900, 1, 1),
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'max': (date.today() - timedelta(days=18 * 365)).strftime('%Y-%m-%d'),
+                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+            }
+        )
+    )
+
     class Meta:
         model = Miembro
-        fields = ['perfil','nombre', 'edad', 'comida_preferida', 'gustos', 'disgustos', 'extra']
+        fields = ['nombre', 'edad', 'cumpleanos', 'comida_preferida', 'gustos', 'disgustos', 'extra']
         widgets = {
             'nombre': forms.TextInput(attrs={'class': 'form-control'}),
             'edad': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -88,11 +114,6 @@ class MiembroForm(forms.ModelForm):
             'disgustos': forms.Textarea(attrs={'class': 'form-control'}),
             'extra': forms.Textarea(attrs={'class': 'form-control'}),
         }
-
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['perfil'].required = True
 
 ComidaMiembroFormSet = formset_factory(MiembroForm, formset=BaseFormSet, extra=1)
 class ComidaForm(forms.ModelForm):
@@ -175,9 +196,18 @@ class ElementoCompraForm(forms.ModelForm):
         }
         
 ElementoCompraFormSet = formset_factory(ElementoCompraForm, extra=1)
-
 class CompraForm(forms.ModelForm):
-    comida = forms.ModelChoiceField(queryset=Comida.objects.all())
+    comida = forms.ModelChoiceField(queryset=Comida.objects.all(), required=False, empty_label="Sin comida")
+    fecha = forms.DateField(
+        initial=date(1900, 1, 1),
+        widget=forms.DateInput(
+            attrs={
+                'type': 'date',
+                'max': (date.today() - timedelta(days=45 * 365)).strftime('%Y-%m-%d'),
+                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+            }
+        )
+    )
 
     class Meta:
         model = Compra

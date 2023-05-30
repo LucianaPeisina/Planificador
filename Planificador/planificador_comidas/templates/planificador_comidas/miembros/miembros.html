@@ -6,45 +6,65 @@ Miembros
 {% endblock %}
 
 {% block extracss %}
-
-  <link rel="stylesheet" type="text/css" href="{% static 'css/miembros.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/miembros.css' %}">
 {% endblock extracss %}
-{% block breadcrumb %}
 
-<h1>¡Estos son los miembros de la familia!</h1>    
+{% block breadcrumb %}
+<h1>¡Estos son los miembros de la familia!</h1>
 {% endblock breadcrumb %}
+
 {% block encabezado %}
 
-{% endblock %}
+{% endblock encabezado %}
 
 {% block contenido %}
-<div class="miembros-container">
-  {% for miembro in miembros %}
-    <div class="miembro-card">
+<div class="perfil-container">
+  <h2>Perfil</h2>
+  <div class="miembro-card">
     <div class="miembro-avatar">
-    <!-- Aquí puedes mostrar la imagen de perfil o el logotipo del miembro -->
+      <!-- Aquí puedes mostrar la imagen de perfil o el logotipo del miembro -->
     </div>
     <div class="miembro-info">
-    <h3>Nombre: {{ miembro.nombre }}</h3>
-    <p>Edad: {{ miembro.edad }}</p>
-    <p>Comida preferida: {{ miembro.comida_preferida }}</p>
-    <p>Gustos: {{ miembro.gustos }}</p>
-    <p>Disgustos: {{ miembro.disgustos }}</p>
-    <p>Extra: {{ miembro.extra }}</p>
+      <h3>{{ perfil.user.username }}</h3>
+      <p>Cumpleaños: {{ perfil.cumpleanos }}</p>
+      <p>Gustos: {{ perfil.gustos }}</p>
+      <p>Disgustos: {{ perfil.disgustos }}</p>
+      <p>Extra: {{ perfil.extra }}</p>
     </div>
     <div class="miembro-buttons">
-    <a href="{% url 'eliminar_miembro' pk=miembro.pk %}" class="btn btn-danger">Eliminar</a>
-    <a href="{% url 'editar_miembro' pk=miembro.pk %}" class="btn btn-primary">Editar</a>
+      <a href="{% url 'editar_perfil' %}" class="btn btn-primary">Editar perfil</a>
     </div>
-
-  </div> 
-  
-  <a href="{% url 'agregar_miembro' %}" class="add-card">
-      <div class="add-icon">
-        <i class="fas fa-plus"></i>
-      </div>
-    </a>
-  {% endfor %}
+  </div>
 </div>
-{% endblock %}
+
+<div class="miembros-container">
+  {% for miembro in miembros %}
+  <div class="miembro-card">
+    <div class="miembro-avatar">
+      <!-- Aquí puedes mostrar la imagen de perfil o el logotipo del miembro -->
+    </div>
+    <div class="miembro-info">
+      <h3>{{ miembro.nombre }}</h3>
+      <p>Edad: {{ miembro.edad }}</p>
+      <p>Comida preferida: {{ miembro.comida_preferida }}</p>
+      <p>Gustos: {{ miembro.gustos }}</p>
+      <p>Disgustos: {{ miembro.disgustos }}</p>
+      <p>Extra: {{ miembro.extra }}</p>
+    </div>
+    <div class="miembro-buttons">
+      <a href="{% url 'eliminar_miembro' pk=miembro.pk %}" class="btn btn-danger">Eliminar</a>
+      <a href="{% url 'editar_miembro' pk=miembro.pk %}" class="btn btn-primary">Editar</a>
+
+
+    </div>
+  </div>
+  {% endfor %}
+
+  <a href="{% url 'agregar_miembro' %}" class="add-card">
+    <div class="add-icon">
+      <i class="fas fa-plus"></i>
+    </div>
+  </a>
+</div>
+{% endblock contenido %}
 

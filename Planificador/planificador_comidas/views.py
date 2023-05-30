@@ -76,22 +76,27 @@ def logout_request(request):
 # ...
 
 #@login_required
+
+
 def editar_perfil(request):
-    perfil = request.user.perfil
+    perfil = Perfil.objects.get(user=request.user)
+
     if request.method == 'POST':
         form = PerfilForm(request.POST, instance=perfil)
         if form.is_valid():
             form.save()
-            return redirect('planificador_comidas:perfil')  
+            return redirect('perfil')
+        else:
+            messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
         form = PerfilForm(instance=perfil)
-    
-    return render(request, 'planificador_comidas/editar_perfil.html', {'form': form})
+
+    return render(request, 'planificador_comidas/perfil/editar_perfil.html', {'form': form})
 
 #@login_required
 def perfil(request):
     perfil = request.user.perfil
-    return render(request, 'planificador_comidas/perfil.html', {'perfil': perfil})
+    return render(request, 'planificador_comidas/perfil/perfil.html', {'perfil': perfil})
 
 
 #@login_required
@@ -168,16 +173,20 @@ def eliminar_comida(request, pk):
 #@login_required
 def miembros(request):
     miembros = Miembro.objects.all()
-    return render(request, 'planificador_comidas/miembros/miembros.html', {'miembros': miembros})
+    perfil = request.user.perfil
+    
+    return render(request, 'planificador_comidas/miembros/miembros.html', {'miembros': miembros, 'perfil': perfil})
+
 
 
 #@login_required
+
 def agregar_miembro(request):
     if request.method == 'POST':
         form = MiembroForm(request.POST)
         if form.is_valid():
             miembro = form.save(commit=False)
-           # miembro.user = request.user
+            miembro.usuario = request.user 
             miembro.save()
             return redirect('miembros')
     else:
