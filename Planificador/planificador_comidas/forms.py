@@ -93,11 +93,11 @@ class PerfilForm(forms.ModelForm):
 
 class MiembroForm(forms.ModelForm):
     cumpleanos = forms.DateField(
-        initial=date(1900, 1, 1),
+        initial=date(2023, 1, 1),
         widget=forms.DateInput(
             attrs={
                 'type': 'date',
-                'max': (date.today() - timedelta(days=18 * 365)).strftime('%Y-%m-%d'),
+                'max': (date.today() - timedelta(days=0 * 365)).strftime('%Y-%m-%d'),
                 'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
             }
         )
