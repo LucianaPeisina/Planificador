@@ -207,11 +207,12 @@ def editar_miembro(request, pk):
     if request.method == 'POST':
         form = MiembroForm(request.POST, instance=miembro)
         if form.is_valid():
-            form.save()
+            miembro= form.save(commit=False)
+            miembro.save()
             return redirect('miembros')
     else:
         form = MiembroForm(instance=miembro)
-    return render(request, 'planificador_comidas/miembros/editar_miembro.html', {'form': form})
+    return render(request, 'planificador_comidas/miembros/editar_miembro.html', {'form': form, 'miembro':miembro})
 
 
 #@login_required
@@ -224,7 +225,9 @@ def eliminar_miembro(request, pk):
 #@login_required
 def compras(request):
     compras = Compra.objects.all()
-    return render(request, 'planificador_comidas/compras/compras.html', {'compras': compras})
+    elemento = ElementoCompra.objects.all()
+    return render(request, 'planificador_comidas/compras/compras.html', {'compras': compras, 'elemento': elemento})
+
 
 
 #@login_required
@@ -233,9 +236,8 @@ def agregar_compra(request):
         form = CompraForm(request.POST)
         if form.is_valid():
             compra = form.save(commit=False)
-            compra.comida = form.cleaned_data['comida']
             compra.save()
-            return redirect('compras')
+            return redirect('editar_compra', pk=compra.pk)
         else:
             messages.error(request, 'Por favor, corrige los errores en el formulario.')
     else:
@@ -248,20 +250,61 @@ def editar_compra(request, pk):
     if request.method == 'POST':
         form = CompraForm(request.POST, instance=compra)
         if form.is_valid():
-            compra = form.save(commit=False)
-            compra.comida = form.cleaned_data['comida']
-            compra.save()
-
+            compra=  form.save()
+            compra.save
             return redirect('compras')
     else:
         form = CompraForm(instance=compra)
-    return render(request, 'planificador_comidas/compras/editar_compra.html', {'form': form})
-
+    return render(request, 'planificador_comidas/compras/editar_compra.html', {'form': form, 'compra':compra})
 
 def eliminar_compra(request, pk):
     compra = get_object_or_404(Compra, pk=pk)
     compra.delete()
     return redirect('compras')
+
+
+def agregar_elemento(request, compra_pk):
+    compra = Compra.objects.get(pk=compra_pk)
+    if request.method == 'POST':
+        form = ElementoCompraForm(request.POST)
+        if form.is_valid():
+            elemento = form.save(commit=False)
+            elemento.compra = compra
+            elemento.save()
+            return redirect('editar_compra', compra_pk=compra_pk)
+    else:
+        form = ElementoCompraForm()
+    return render(request, 'planificador_comidas/compras/agregar_elemento.html', {'form': form, 'compra': compra})
+
+
+
+def editar_elemento(request, compra_pk, elemento_pk):
+    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
+    if request.method == 'POST':
+        form = ElementoCompraForm(request.POST, instance=elemento)
+        if form.is_valid():
+            form.save()
+            return redirect('editar_compra', pk=compra_pk)
+    else:
+        form = ElementoCompraForm(instance=elemento)
+    return render(request, 'editar_elemento.html', {'form': form})
+
+def eliminar_elemento(request, compra_pk, elemento_pk):
+    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
+    elemento.delete()
+    return redirect('compras')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class TodasComidasListaView(ListView):
@@ -283,43 +326,6 @@ class RunningListaComidasView(ListView):
 
 # ...
 
-def agregar_elemento(request, compra_pk):
-    compra = get_object_or_404(Compra, pk=compra_pk)
-
-    if request.method == 'POST':
-        form = ElementoCompraForm(request.POST)
-        if form.is_valid():
-            elemento = form.save(commit=False)
-            elemento.compra = compra
-            elemento.save()
-            return redirect('compras')
-        else:
-            messages.error(request, 'Por favor, corrige los errores en el formulario.')
-    else:
-        form = ElementoCompraForm()
-
-    return render(request, 'planificador_comidas/compras/agregar_elemento.html', {'form': form, 'compra': compra})
-
-def editar_elemento(request, compra_pk, elemento_pk):
-    compra = get_object_or_404(Compra, pk=compra_pk)
-    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
-
-    if request.method == 'POST':
-        form = ElementoCompraForm(request.POST, instance=elemento)
-        if form.is_valid():
-            elemento = form.save(commit=False)
-            elemento.compra = compra
-            elemento.save()
-            return redirect('compras')
-    else:
-        form = ElementoCompraForm(instance=elemento)
-
-    return render(request, 'planificador_comidas/compras/editar_elemento.html', {'form': form, 'compra': compra, 'elemento': elemento})
-
-def eliminar_elemento(request, compra_pk, elemento_pk):
-    elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
-    elemento.delete()
-    return redirect('compras')
 
 
 #    def get_queryset(self):

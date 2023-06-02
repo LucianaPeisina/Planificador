@@ -1,38 +1,31 @@
 {% extends 'base/base.html' %}
-{% load static %} 
+{% load static %}
 
 {% block titulo %}
     Agregar compra
 {% endblock %}
 {% block encabezado %}
-  
+
 {% endblock %}
 {% block extracss %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/compras.css' %}">
 {% endblock extracss %}
 {% block breadcrumb %}
-  <h2>Agregar compra</h2>
+    <h2>Agregar compra</h2>
 {% endblock breadcrumb %}
 
 {% block contenido %}
-  <form method="post" class="compra-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    
-    <h2>Elementos de Compra</h2>
-    <div class="elemento-container">
-      {{ form.elemento_compra_formset.management_form }}
-      {% for form in form.elemento_compra_formset %}
+    <form method="post" class="compra-form">
+        {% csrf_token %}
         {{ form.as_p }}
-      {% endfor %}
-    </div>
-    
-    <button type="button" id="agregar-elemento-btn">Agregar Elemento</button>
-    <button type="submit">Guardar</button>
-  </form>
-{% endblock %} 
+
+        <button type="submit">Guardar</button>
+    </form>
+   
+{% endblock %}
+
 
 {% block extrascripts %}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="{% static 'js/agregar_compra.js' %}"></script>
+
 {% endblock extrascripts %}
