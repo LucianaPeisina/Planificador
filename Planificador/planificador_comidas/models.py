@@ -101,8 +101,8 @@ class Comida(ComidaAbs):
 
 
     def obtener_url(self):
-        return reverse("comida-detalles", args=(self.id,))
-    
+        return reverse("detalle_comida", args=(self.id,))
+#        return reverse("comida-detalles", args=(self.id,))    
     ingredientes = models.TextField()
     extra = models.TextField(blank=True)
     def __str__(self):
@@ -111,7 +111,8 @@ class Comida(ComidaAbs):
 
     @property
     def obtener_html_url(self):
-        url = reverse("comida-detalles", args=(self.id,))
+#        url = reverse("comida-detalles", args=(self.id,))
+        url = reverse("detalle_comida", args=(self.id,))
         return f'<a href="{url}"> {self.titulo} </a>'
 
     

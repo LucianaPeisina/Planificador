@@ -50,7 +50,6 @@ def registro(request):
 
 
 ############    LOGIN / LOGOUT  #####################
-
 def login_request(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data= request.POST)
@@ -73,8 +72,7 @@ def logout_request(request):
     messages.info(request,"Sesion finalizada")
     return render(request, 'planificador_comidas/index.html') 
 
-# ...
-
+############    PERFIL  #####################
 #@login_required
 def editar_perfil(request):
     perfil = Perfil.objects.get(user=request.user)
@@ -106,11 +104,11 @@ def listado_perfiles(request):
 
     return render(request, 'planificador_comidas/perfil/listado_perfiles.html', context)
 
+############    COMIDA  #####################
 #@login_required
 def comida(request):
     comidas = Comida.objects.all()
     return render(request, 'planificador_comidas/comida/comida.html', {'comidas': comidas})
-
 
 #@login_required
 def agregar_comida(request):
@@ -126,7 +124,6 @@ def agregar_comida(request):
     else:
         form = ComidaForm()
     return render(request, 'planificador_comidas/comida/agregar_comida.html', {'form': form})
-
 
 #@login_required
 def editar_comida(request, pk):
@@ -160,15 +157,14 @@ def editar_comida(request, pk):
 
     return render(request, 'planificador_comidas/comida/editar_comida.html', {'form': form})
 
-
 #@login_required(login_url="signup")
-def comida_detalles(request, comida_id):
+#def comida_detalles(request, comida_id):
+def detalle_comida(request, comida_id):
     comida = Comida.objects.get(id=comida_id)
     MiembroComida = MiembroComida.objects.filter(comida=comida)
     context = {"Comida": comida, "Miembro": MiembroComida}
-    return render(request, "comida-detalles.html", context)
-
-
+#    return render(request, "comida-detalles.html", context)
+    return render(request, "detalle_comida.html", context)
 
 #@login_required
 def eliminar_comida(request, pk):
@@ -176,15 +172,13 @@ def eliminar_comida(request, pk):
     comida.delete()
     return redirect('comida')
 
-
+############    MIEMBRO  #####################
 #@login_required
 def miembros(request):
     miembros = Miembro.objects.all()
     perfil = request.user.perfil
     
     return render(request, 'planificador_comidas/miembros/miembros.html', {'miembros': miembros, 'perfil': perfil})
-
-
 
 #@login_required
 
@@ -200,7 +194,6 @@ def agregar_miembro(request):
         form = MiembroForm()
     return render(request, 'planificador_comidas/miembros/agregar_miembro.html', {'form': form})
 
-
 #@login_required
 def editar_miembro(request, pk):
     miembro = get_object_or_404(Miembro, pk=pk)
@@ -214,21 +207,18 @@ def editar_miembro(request, pk):
         form = MiembroForm(instance=miembro)
     return render(request, 'planificador_comidas/miembros/editar_miembro.html', {'form': form, 'miembro':miembro})
 
-
 #@login_required
 def eliminar_miembro(request, pk):
     miembro = get_object_or_404(Miembro, pk=pk)
     miembro.delete()
     return redirect('miembros')
 
-
+############    COMPRAS  #####################
 #@login_required
 def compras(request):
     compras = Compra.objects.all()
     elemento = ElementoCompra.objects.all()
     return render(request, 'planificador_comidas/compras/compras.html', {'compras': compras, 'elemento': elemento})
-
-
 
 #@login_required
 def agregar_compra(request):
@@ -262,7 +252,7 @@ def eliminar_compra(request, pk):
     compra.delete()
     return redirect('compras')
 
-
+############    ELEMENTO COMPRA  #####################
 def agregar_elemento(request, compra_pk):
     compra = Compra.objects.get(pk=compra_pk)
     if request.method == 'POST':
@@ -271,12 +261,11 @@ def agregar_elemento(request, compra_pk):
             elemento = form.save(commit=False)
             elemento.compra = compra
             elemento.save()
-            return redirect('editar_compra', compra_pk=compra_pk)
+            #return redirect('editar_compra', compra_pk=compra_pk)
+            return redirect('editar_compra', pk=compra_pk)
     else:
         form = ElementoCompraForm()
     return render(request, 'planificador_comidas/compras/agregar_elemento.html', {'form': form, 'compra': compra})
-
-
 
 def editar_elemento(request, compra_pk, elemento_pk):
     elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
@@ -294,30 +283,16 @@ def eliminar_elemento(request, compra_pk, elemento_pk):
     elemento.delete()
     return redirect('compras')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+############      #####################
 class TodasComidasListaView(ListView):
-    
+   
     template_name = "lista_comida.html"
     model = Comida
 
    # def get_queryset(self):
     #    return Comida.objects.get_all_events(user=self.request.user)
 
-
 class RunningListaComidasView(ListView):
-
 
     template_name = "lista_comida.html"
     model = Comida
