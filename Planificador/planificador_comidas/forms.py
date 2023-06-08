@@ -73,15 +73,15 @@ class AltaUsuarioForm(UserCreationForm):
 
 class PerfilForm(forms.ModelForm):
     gustos = forms.CharField(label='Gustos: ')
-    disgustos = forms.CharField(label='Disgustos:')
+    disgustos = forms.CharField(label='Desagrados:')
     extra = forms.CharField(label='Extra:')
     cumpleanos = forms.DateField(
-        initial=date(1900, 1, 1),
+        initial=date(date.today().year - 18, 1, 1),
         widget=forms.DateInput(
             attrs={
                 'type': 'date',
                 'max': (date.today() - timedelta(days=18*365)).strftime('%Y-%m-%d'),
-                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+                'min': date(date.today().year - 100, 1, 1).strftime('%Y-%m-%d'),
                 
             }
         )
@@ -93,12 +93,12 @@ class PerfilForm(forms.ModelForm):
 
 class MiembroForm(forms.ModelForm):
     cumpleanos = forms.DateField(
-        initial=date(2023, 1, 1),
+        initial=date(date.today().year - 18, 1, 1),
         widget=forms.DateInput(
             attrs={
                 'type': 'date',
-                'max': (date.today() - timedelta(days=0 * 365)).strftime('%Y-%m-%d'),
-                'min': date(1920, 1, 1).strftime('%Y-%m-%d'),
+                'max': (date.today() - timedelta(days=18 * 365)).strftime('%Y-%m-%d'),
+                'min': date(date.today().year - 100, 1, 1).strftime('%Y-%m-%d'),
             }
         )
     )
@@ -200,11 +200,12 @@ ElementoCompraFormSet = formset_factory(ElementoCompraForm, extra=1)
 class CompraForm(forms.ModelForm):
     comida = forms.ModelChoiceField(queryset=Comida.objects.all(), required=False, empty_label="Sin comida")
     fecha = forms.DateField(
-        initial=date(date.today().year, date.today().month, date.today().day),
+        initial=date.today(),
+        #initial=date(date.today().year, date.today().month, date.today().day),
         widget=forms.DateInput(
             attrs={
                 'type': 'date',
-                'max': (date.today() - timedelta(days=0 * 365)).strftime('%Y-%m-%d'),
+                'max': (date.today() + timedelta(days=1 * 365)).strftime('%Y-%m-%d'),
                 'min': date(date.today().year, 1, 1).strftime('%Y-%m-%d'),
             }
         )
