@@ -12,54 +12,45 @@
 {% endblock breadcrumb %}
 {% block contenido %}
 <div class="compras-container">
-    {% for compra in compras %}
-    <div class="compra-card">
-      <div class="compra-info">
-        <h3>{{ compra }}</h3>
+  {% for compra in compras %}
+  <!-- ... -->
+  <ul class="elementos-compra">
+    {% for elemento_compra in compra.elementocompra_set.all %}
+      <li>
+        <!-- ... -->
+        <span>Nombre: {{ elemento_compra.ingrediente }}</span>
         <div class="icon-container">
-          <i class="fas fa-fruit"></i>
+          <a href="{% url 'eliminar_elemento' elemento_compra.pk %}" class="action-button">
+            <i class="fas fa-trash-alt"></i>
+          </a>
+          <a href="{% url 'editar_elemento' elemento_compra.pk %}" class="action-button">
+            <i class="fas fa-edit"></i>
+          </a>
         </div>
-      </div>
-      <ul class="elementos-compra">
-        {% for elemento in compra.elementocompra_set.all %}
-        <li>
-          <div class="elemento-info">
-            <span>Nombre: {{ elemento.ingrediente }}</span>
-            <div class="icon-container">
-              <a href="{% url 'eliminar_elemento' elemento.pk %}" class="action-button">
-                <i class="fas fa-trash-alt"></i>
-              </a>
-              <a href="{% url 'editar_elemento' elemento.pk %}" class="action-button">
-                <i class="fas fa-edit"></i>
-              </a>
-            </div>
-          </div>
-          <div class="elemento-detalle">
-            <span>Cantidad: {{ elemento.cantidad }} {{ elemento.tipo_cantidad }}</span>
-            <span>Costo: {{ elemento.precio_aprox | floatformat:2 }}</span>
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
-      <div class="compra-total">
-        <span>Total:</span>
-        <span>{{ compra.costo_total | floatformat:2 }}</span>
-      </div>
-      <div class="compra-actions">
-        <a href="{% url 'eliminar_compra' compra.pk %}" class="action-button">
-          <i class="fas fa-trash-alt"></i> Eliminar
-        </a>
-        <a href="{% url 'editar_compra' compra.pk %}" class="action-button">
-          <i class="fas fa-edit"></i> Editar
-        </a>
-      </div>
-    </div>
+        <!-- ... -->
+      </li>
     {% endfor %}
-    <a href="{% url 'agregar_compra' %}" class="compra-card add-card">
-      <div class="add-icon">
-        <i class="fas fa-plus"></i>
-      </div>
+  </ul>
+  <!-- ... -->
+  <div class="compra-total">
+    <span>Total:</span>
+    <span>{{ compra.costo_total | floatformat:2 }}</span>
+  </div>
+  <div class="compra-actions">
+    <a href="{% url 'eliminar_compra' compra.pk %}" class="action-button">
+      <i class="fas fa-trash-alt"></i> Eliminar
+    </a>
+    <a href="{% url 'editar_compra' compra.pk %}" class="action-button">
+      <i class="fas fa-edit"></i> Editar
     </a>
   </div>
+</div>
+{% endfor %}
+<a href="{% url 'agregar_compra' %}" class="compra-card add-card">
+  <div class="add-icon">
+    <i class="fas fa-plus"></i>
+  </div>
+</a>
+</div>
   
 {% endblock %}
