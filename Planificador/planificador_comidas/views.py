@@ -259,6 +259,22 @@ def agregar_elemento(request, compra_pk):
         form = ElementoCompraForm()
     return render(request, 'planificador_comidas/compras/agregar_elemento.html', {'form': form, 'compra': compra})
 
+
+def agregar_elemento(request, compra_pk):
+    compra = Compra.objects.get(pk=compra_pk)
+    if request.method == 'POST':
+        form = ElementoCompraForm(request.POST)
+        if form.is_valid():
+            elemento = form.save(commit=False)
+            elemento.compra = compra
+            elemento.save()
+            return redirect('editar_compra', compra_pk=compra_pk)
+    else:
+        form = ElementoCompraForm()
+    return render(request, 'agregar_elemento.html', {'form': form})
+
+
+
 def editar_elemento(request, compra_pk, elemento_pk):
     elemento = get_object_or_404(ElementoCompra, pk=elemento_pk)
     if request.method == 'POST':
@@ -275,7 +291,19 @@ def eliminar_elemento(request, compra_pk, elemento_pk):
     elemento.delete()
     return redirect('compras')
 
+############      #####################
+class TodasComidasListaView(ListView):
+   
+    template_name = "lista_comida.html"
+    model = Comida
 
+   # def get_queryset(self):
+    #    return Comida.objects.get_all_events(user=self.request.user)
+
+class RunningListaComidasView(ListView):
+
+    template_name = "lista_comida.html"
+    model = Comida
 
 
 def get_date(req_day):
