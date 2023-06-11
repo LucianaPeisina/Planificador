@@ -14,6 +14,7 @@
 <div class="compras-container">
   {% for compra in compras %}
   <!-- ... -->
+<<<<<<< HEAD
   <ul class="elementos-compra">
     {% for elemento_compra in compra.elementocompra_set.all %}
       <li>
@@ -36,6 +37,21 @@
     <span>Total:</span>
     <span>{{ compra.costo_total | floatformat:2 }}</span>
   </div>
+=======
+  <span>Fecha:</span>
+  <span>{{ compra.fecha}}</span>
+  
+  <br>
+  <!-- ... -->
+  <div class="compra-total">
+
+    <span>Total:</span>
+    <span>{{ compra.costo_total | floatformat:2 }}</span>
+  </div>  
+  <br>
+  <span>Extra:</span>
+  <span>{{ compra.extra}}</span>
+>>>>>>> 9f5d7ae85eb3c203dcc8b7fef47e2751bb3c9877
   <div class="compra-actions">
     <a href="{% url 'eliminar_compra' compra.pk %}" class="action-button">
       <i class="fas fa-trash-alt"></i> Eliminar

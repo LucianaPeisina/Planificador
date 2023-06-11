@@ -23,7 +23,7 @@
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img">
 
-          <img src="{% static '/img/enfermera-jeringa-dibujado-mano-2.png' %}" class="img-fluid animated" alt="">
+          <img src="{% static '/img/menu.png' %}" class="img-fluid animated" alt="">
 
         </div>
       </div>
@@ -94,9 +94,17 @@
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box">
               <div class="icon"><i class="bx bx-tachometer"></i></div>
-              <h4 class="title"><a href="miembros">Miembros</a></h4>
+              <h4 class="title"><a href="{% url 'miembros' %}">Miembros</a></h4>
               <p class="description">Puede sumar cuantos miembros quiera en el sistema, junto con su información útil, ¿Alguien es vegetario? ¿Alergico? Anotelo, y
                 tenga siempre a manos esas caracteristicas..</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="{% url 'listado_perfiles' %}">Listado Perfiles</a></h4>
+              <p class="description">Listado de perfiles actuales</p>
             </div>
           </div>
 

@@ -6,20 +6,22 @@ from django.urls import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-# models.py
-
-from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
+# Registramos los modelos
 class Perfil(models.Model):
-
+    class Meta:
+        verbose_name = "Perfil"
+        verbose_name_plural = "Perfiles"
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     cumpleanos = models.DateField(null=True, blank=True)
     gustos = models.TextField(blank=True)
     disgustos = models.TextField(blank=True)
     extra = models.TextField(blank=True)
+
+    # def __str__(self):
+    #     return "%s %s %s" % (self.user, self.cumpleanos, self.gustos,)
+
+#    list_display = ('user', 'cumpleanos', 'gustos')
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -41,7 +43,10 @@ class Miembro(models.Model):
     disgustos = models.TextField()
     extra = models.TextField()
 
-    
+    def __str__(self):
+        return "%s %s %s" % (self.usuario, self.nombre, self.edad)
+
+    list_display = ('usuario', 'nombre', 'edad')
 
 
 class ComidaManager(models.Manager):
@@ -92,11 +97,12 @@ class Comida(ComidaAbs):
     objects = ComidaManager()
 
     def __str__(self):
-        return self.titulo
+        return "%s" % (self.titulo)
+
 
     def obtener_url(self):
-        return reverse("comida-detalles", args=(self.id,))
-    
+        return reverse("detalle_comida", args=(self.id,))
+#        return reverse("comida-detalles", args=(self.id,))    
     ingredientes = models.TextField()
     extra = models.TextField(blank=True)
     def __str__(self):
@@ -105,7 +111,8 @@ class Comida(ComidaAbs):
 
     @property
     def obtener_html_url(self):
-        url = reverse("comida-detalles", args=(self.id,))
+#        url = reverse("comida-detalles", args=(self.id,))
+        url = reverse("detalle_comida", args=(self.id,))
         return f'<a href="{url}"> {self.titulo} </a>'
 
     

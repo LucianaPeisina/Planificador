@@ -9,9 +9,9 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     #Rutas para Perfil
-
     path('perfil/', views.perfil, name='perfil'),
-    path('editar_perfil/', views.editar_perfil, name='editar_perfil'),
+    path('perfil/editar_perfil/', views.editar_perfil, name='editar_perfil'),
+    path('listado_perfiles/', views.listado_perfiles, name="listado_perfiles"),
 
     # Rutas para el menú semanal
     path('comida/', views.comida, name='comida'),
@@ -19,8 +19,12 @@ urlpatterns = [
     path('comida/<int:pk>/editar/', views.editar_comida, name='editar_comida'),
     path('comida/<int:pk>/eliminar/', views.eliminar_comida, name='eliminar_comida'),
     path("lista_comida/", views.TodasComidasListaView.as_view(), name="lista_comida"),
+    #*** no entiendo que hace y como esta implementado
     path("running-lista-comidas/", views.RunningListaComidasView.as_view(),name="running_comidas",),
-    path("comida/<int:comida_id>/detalles/", views.comida_detalles, name="comida-detalles"),
+    #*** cambie en varias definiciones pq estaban mezclados los nombres:
+    #*** (antes) comida-detalles <-> (despues) detalle_comida
+    # #path("comida/<int:comida_id>/detalles/", views.comida_detalles, name="comida-detalles"),
+    path("comida/<int:comida_id>/detalles/", views.detalle_comida, name="detalle_comida"),
 
     # Rutas para los miembros de la familia
     path('miembros/', views.miembros, name='miembros'),

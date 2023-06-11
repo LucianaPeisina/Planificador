@@ -128,6 +128,23 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Virtual Environment
-Planificador/Planificador/
-Planificador/db.sqlite3
+# Django migration files
+*.py[eo]
+*/migrations/*.py
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# Secret keys and other sensitive data
+*.key
+*.secret
+*.pem
+
+# Editor files
+.idea/
+.vscode/
+*.swp
+
+# Dependency directories
+venv/
+env/
+envPlanificador

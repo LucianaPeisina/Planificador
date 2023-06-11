@@ -15,7 +15,11 @@
 {% endblock breadcrumb %}
 
 {% block contenido %}
+<<<<<<< HEAD
     <form method="post" class="elemento-form">
+=======
+    <form method="post" class="elemento-form" action="{% url 'agregar_elemento' compra.pk %}">
+>>>>>>> 9f5d7ae85eb3c203dcc8b7fef47e2751bb3c9877
         {% csrf_token %}
         {{ form.as_p }}
 
