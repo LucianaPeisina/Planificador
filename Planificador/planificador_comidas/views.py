@@ -291,20 +291,6 @@ def eliminar_elemento(request, compra_pk, elemento_pk):
     elemento.delete()
     return redirect('compras')
 
-############      #####################
-class TodasComidasListaView(ListView):
-   
-    template_name = "lista_comida.html"
-    model = Comida
-
-   # def get_queryset(self):
-    #    return Comida.objects.get_all_events(user=self.request.user)
-
-class RunningListaComidasView(ListView):
-
-    template_name = "lista_comida.html"
-    model = Comida
-
 
 def get_date(req_day):
     if req_day:
@@ -377,7 +363,7 @@ class CalendarViewNew(generic.View):
 
         if form.is_valid():
             comida = form.save(commit=False)
-            comida.usuario = request.user
+            comida.user = request.user
             comida.save()
             return render(request, self.template_name)
 

@@ -191,6 +191,8 @@ class ComidaForm(forms.ModelForm):
 
         return comida
 
+
+
 class ElementoCompraForm(forms.ModelForm):
     class Meta:
         model = ElementoCompra
