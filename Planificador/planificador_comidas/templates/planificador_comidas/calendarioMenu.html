@@ -7,17 +7,13 @@
 
 {% block extracss %}
   <link href="{% static 'calendario/main.css' %}" rel="stylesheet" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/calendario.css' %}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+
 {% endblock extracss %}
 
 {% block breadcrumb %}
   <div>
-      <h1><i class="fa fa-calendar"></i> Calendario de Menus</h1>
-      <p>Comida </p>
+      <h1><i class="fa fa-calendar"></i> Calendario de Menús</h1>
+      <p>Comida</p>
   </div>
   <ul class="app-breadcrumb breadcrumb">
       <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
@@ -28,84 +24,135 @@
 {% block contenido %}
 <div class="bodyC">
   <div class="container">
-    <div class="left">
-      <div class="today-date">
-        <div class="comida-day"></div>
-        <div class="comida-date"></div>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="tile row">
+              <div class="col-md-3">
+                  <div id="external-events">
+                      <h4 class="mb-4">Running Events</h4>
+                      {% for comida in events_month %}
+                        <div class="fc-event">
+                            <h3>{{ comida.titulo }}</h3>
+                            <p>From: {{ comida.inicio }}</p>
+                            <p>To: {{ comida.fin }}</p>
+                        </div>
+                      {% empty %}
+                        <p>No Running Events Found</p>
+                      {% endfor %}
+                  </div>
+              </div>
+              <div class="col-md-9">
+                <div id="calendar"></div>
+            </div>
+  
+            <div class="modal fade show" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header bg-primary">
+                          <h5 class="modal-title text-white" id="exampleModalLongTitle">Agregar nueva comida</h5>
+                          <button id="modalClose1" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <form method="post">
+                          {% csrf_token %}
+                          <div class="modal-body">
+                              {{ form.non_field_errors }}
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <div class="form-group">
+                                          <label for="id_titulo" class="col-form-label">Event Title:</label>
+                                          {{ form.titulo }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_descripcion" class="col-form-label">Description:</label>
+                                          {{ form.descripcion }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_inicio" class="col-form-label">Start Date:</label>
+                                          {{ form.inicio }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_fin" class="col-form-label">End Date:</label>
+                                          {{ form.fin }}
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <div class="form-group">
+                                          <label for="id_tipo" class="col-form-label">Type:</label>
+                                          {{ form.tipo }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_ingredientes" class="col-form-label">Ingredients:</label>
+                                          {{ form.ingredientes }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_miembro" class="col-form-label">Members:</label>
+                                          {{ form.miembro }}
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="id_extra" class="col-form-label">Extra:</label>
+                                          {{ form.extra }}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button id="modalClose2" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Save</button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+          
+          
+          
+          </div>
       </div>
-      <div class="comidas"></div>
-      
-      <div class="agregar-comida-wrapper">
-        <div class="agregar-comida-header">
-          <div class="titulo">Agregar Comida</div>
-          <i class="fas fa-times close"></i>
-        </div>
-        <div class="agregar-comida-body">
-          <div class="agregar-comida-input">
-            <input type="text" placeholder="Nombre" class="comida-name" />
-          </div>
-          <div class="agregar-comida-input">
-            <input type="text" placeholder="Desde" class="comida-time-from" />
-          </div>
-          <div class="agregar-comida-input">
-            <input type="text" placeholder="Hasta" class="comida-time-to" />
-          </div>
-          <div class="agregar-comida-input">
-            <textarea placeholder="Descripción" class="comida-descripcion"></textarea>
-          </div>
-          <div class="agregar-comida-input">
-            <textarea placeholder="Ingredientes" class="comida-ingredientes"></textarea>
-          </div>
-          <div class="agregar-comida-input">
-            <input type="text" placeholder="Miembro" class="comida-miembro" />
-          </div>
-          <div class="agregar-comida-input">
-            <textarea placeholder="Extra" class="comida-extra"></textarea>
-          </div>
-        </div>
-        <div class="agregar-comida-footer">
-          <button class="agregar-comida-btn">Agregar comida</button>
-        </div>
-      </div>
-      
-      <button class="agregar-comida">
-        <i class="fas fa-plus"></i>
-      </button>
-    </div>
-    <div class="right">
-      <div class="calendar">
-        <div class="month">
-          <i class="fas fa-angle-left prev"></i>
-          <div class="date"></div>
-          <i class="fas fa-angle-right next"></i>
-        </div>
-        <div class="weekdays">
-          <div>Dom</div>
-          <div>Lun</div>
-          <div>Mar</div>
-          <div>Mie</div>
-          <div>Jue</div>
-          <div>Vie</div>
-          <div>Sab</div>
-        </div>
-        <div class="days"></div>
-        <div class="goto-today">
-          <div class="goto">
-            <input type="text" placeholder="mm/aaaaa" class="date-input" />
-            <button class="goto-btn">Ir</button>
-          </div>
-          <button class="today-btn">Hoy</button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
-
-<script src="{% static 'calendario/main.js' %}"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-crossorigin="anonymous"></script>
-<script src="{% static 'calendario/main.js' %}"></script>
 {% endblock contenido %}
 
 {% block extrascripts %}
+<script src="{% static 'calendario/main.js' %}"></script>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,list'
+      },
+      navLinks: true,
+      selectable: true,
+      selectMirror: true,
+      select: function(arg) {
+        console.log('clicked')
+        var modal = document.getElementById('eventModal')
+        modal.style.display = 'block'
+        calendar.unselect()
+      },
+      editable: true,
+      dayMaxEvents: true,
+
+    });
+
+    calendar.render();
+
+  });
+
+      const closeBtn1 = document.getElementById('modalClose1');
+      const closeBtn2 = document.getElementById('modalClose2');
+      closeBtn1.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
+      closeBtn2.addEventListener('click',()=>{
+        const eventModal = document.getElementById('eventModal')
+        eventModal.style.display = 'none';
+      });
+</script>
 {% endblock extrascripts %}

@@ -1,26 +1,29 @@
 from calendar import month_name
+import calendar
 from datetime import timedelta, datetime, date
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
 from django.contrib.auth import authenticate, login , logout
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views import generic
 from django.views.generic import ListView
+from datetime import timedelta
 
+from planificador_comidas.utils import Calendar
 #from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm, PerfilForm
 from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, PerfilForm
 from .models import Comida, Miembro, Compra, ElementoCompra, Perfil
 
 from django.contrib import messages
 from .forms import AltaUsuarioForm
-# ...
 
-def calendario_menu(request):
-    return render(request, 'planificador_comidas/calendarioMenu.html')
+
+
 
 def index(request):
     return render(request, 'planificador_comidas/index.html')
@@ -104,26 +107,15 @@ def listado_perfiles(request):
 
     return render(request, 'planificador_comidas/perfil/listado_perfiles.html', context)
 
+
+
 ############    COMIDA  #####################
 #@login_required
 def comida(request):
     comidas = Comida.objects.all()
     return render(request, 'planificador_comidas/comida/comida.html', {'comidas': comidas})
 
-#@login_required
-def agregar_comida(request):
-    if request.method == 'POST':
-        form = ComidaForm(request.POST)
-        if form.is_valid():
-            comida = form.save(commit=False)
-            comida.save()
-            form.save_m2m()
-            return redirect('comida')
-        else:
-            messages.error(request, 'Por favor, corrige los errores en el formulario.')
-    else:
-        form = ComidaForm()
-    return render(request, 'planificador_comidas/comida/agregar_comida.html', {'form': form})
+
 
 #@login_required
 def editar_comida(request, pk):
@@ -283,31 +275,10 @@ def eliminar_elemento(request, compra_pk, elemento_pk):
     elemento.delete()
     return redirect('compras')
 
-############      #####################
-class TodasComidasListaView(ListView):
-   
-    template_name = "lista_comida.html"
-    model = Comida
-
-   # def get_queryset(self):
-    #    return Comida.objects.get_all_events(user=self.request.user)
-
-class RunningListaComidasView(ListView):
-
-    template_name = "lista_comida.html"
-    model = Comida
 
 
 
-# ...
-
-
-
-#    def get_queryset(self):
- #       return Comida.objects.get_running_comidas(user=self.request.user)
-
-"""
-def get_fecha(req_day):
+def get_date(req_day):
     if req_day:
         year, month = (int(x) for x in req_day.split("-"))
         return date(year, month, day=1)
@@ -316,68 +287,73 @@ def get_fecha(req_day):
 
 def prev_mes(d):
     first = d.replace(day=1)
-    prev_mes = first - timedelta(days=1)
-    mes = "mes=" + str(prev_mes.year) + "-" + str(prev_mes.mont)
-    return mes
+    prev_month = first - timedelta(days=1)
+    month = "mes=" + str(prev_month.year) + "-" + str(prev_month.month)
+    return month
 
-  
+
 def sig_mes(d):
-    days_in_mes = calendar.monthrange(d.year, d.month)[1]
-    last = d.replace(day=days_in_mes)
-    next_mes = last + timedelta(days=1)
-    mes = "mes=" + str(next_mes.year) + "-" + str(next_mes.month)
-    return mes
+    days_in_month = calendar.monthrange(d.year, d.month)[1]
+    last = d.replace(day=days_in_month)
+    next_month = last + timedelta(days=1)
+    month = "mes=" + str(next_month.year) + "-" + str(next_month.month)
+    return month
 
 
-class CalendarioView(generic.ListView):
-    #login_url = "signin"
+
+
+
+
+class CalendarView( generic.ListView):
+
     model = Comida
-    template_name = "calendar.html"
+    template_name = "calendarioMenu.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        d = get_fecha(self.request.GET.get("month", None))
-        cal = calendar(d.year, d.month)
+        d = get_date(self.request.GET.get("month", None))
+        cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True)
-        context["calendario"] = mark_safe(html_cal)
-        context["prev_mes"] = prev_mes(d)
-        context["sig_mes"] = sig_mes(d)
+        context["calendar"] = mark_safe(html_cal)
+        context["prev_month"] = prev_mes(d)
+        context["next_month"] = sig_mes(d)
         return context
 
-
-class CalendarioViewNuevo( generic.View):
-    login_url = "accounts:signin"
-    template_name = "calendarapp/calendar.html"
+class CalendarViewNew(generic.View):
+    template_name = "planificador_comidas/calendarioMenu.html"
     form_class = ComidaForm
 
     def get(self, request, *args, **kwargs):
-        forms = self.form_class()
-        comidas = Comida.objects.get_all_events(user=request.user)
-        comidas_mes = Comida.objects.get_running_events(user=request.user)
-        comida_lista = []
+        form = self.form_class(user=request.user, initial={'usuario': request.user})
 
+        comidas = Comida.objects.get_all_events(user=request.user)
+        events_month = Comida.objects.get_running_events(user=request.user)
+        event_list = []
         for comida in comidas:
-            comida_lista.append
-            (
+            event_list.append(
                 {
                     "titulo": comida.titulo,
                     "inicio": comida.inicio.strftime("%Y-%m-%dT%H:%M:%S"),
                     "fin": comida.fin.strftime("%Y-%m-%dT%H:%M:%S"),
-
                 }
             )
-        context = {"form": forms, "comidas": comida_lista,
-                   "comidas_mes": comidas_mes}
+        context = {
+            "form": form,
+            "comidas": event_list,
+            "events_month": events_month,
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        forms = self.form_class(request.POST)
-        if forms.is_valid():
-            form = forms.save(commit=False)
-            form.user = request.user
-            form.save()
-            return redirect("calendarioMenu")
-        context = {"form": forms}
+        form = self.form_class(request.user, request.POST, initial={'usuario': request.user})
+
+        if form.is_valid():
+            comida = form.save(commit=False)
+            comida.usuario = request.user
+            comida.save()
+            return render(request, self.template_name)
+
+        context = {"form": form}
         return render(request, self.template_name, context)
 
-"""
+

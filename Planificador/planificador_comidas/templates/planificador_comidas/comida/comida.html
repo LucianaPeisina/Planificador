@@ -9,11 +9,15 @@
 
 {% block contenido %}
 
-  <h2>Agregar menú</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Agregar</button>
-  </form>
+<div class="clearfix">
+    <span class="left m-2" style="font-size: 20px;">Wellcome, {{ request.user }}</span>
+    <a class="btn btn-info right" href="{% url 'accounts:signout' %}"> Sign Out</a>
+	<a class="btn btn-info right mr-2" href="{% url 'calendarioMenu' %}?{{ sig_mes }} "> Next Mes >> </a>
+    <a class="btn btn-info right mr-2" href="{% url 'calendarioMenu' %}?{{ prev_mes }}"> << Previous Month </a>
+    <a class="btn btn-info right mr-2" href="{% url 'agregar_comida' %}"> + New Event </a>
+</div>
+<div style="color: blueviolet;">
+    {{ calendar }}
+</div>
 
 {% endblock %}
