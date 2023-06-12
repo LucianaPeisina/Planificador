@@ -159,10 +159,16 @@ class ComidaForm(forms.ModelForm):
         }
 
     def __init__(self, user, *args, **kwargs):
-        super(ComidaForm, self).__init__(*args, **kwargs)
+        initial = kwargs.pop('initial', {})
+        super(ComidaForm, self).__init__(*args, **kwargs, initial=initial)
         self.fields["inicio"].input_formats = ("%Y-%m-%dT%H:%M",)
         self.fields["fin"].input_formats = ("%Y-%m-%dT%H:%M",)
-        self.instance.user = user
+        self.instance.usuario = user
+
+        # Filtrar los objetos Miembro disponibles para el usuario actual
+        self.fields['miembro'].queryset = Miembro.objects.filter(usuario=user)
+
+
 
         if self.instance.pk:
             # Si se está editando una comida existente, se preseleccionan los miembros asociados
@@ -180,10 +186,10 @@ class ComidaForm(forms.ModelForm):
         # Actualizar la relación muchos a muchos con los miembros seleccionados
         if commit:
             comida.save()
-            comida.miembro.set(self.cleaned_data['miembro'])
+            comida.miembros.set(self.cleaned_data['miembros_formset'])
+
 
         return comida
-
 
 
 

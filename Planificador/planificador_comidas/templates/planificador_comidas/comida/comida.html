@@ -8,12 +8,15 @@
 {% endblock %}
 
 {% block contenido %}
-
-  <h2>Agregar menú</h2>
-  <form method="POST">
+<div class="clearfix">
+    <a class="btn btn-info left" href="{% url 'calendarioMenu' %}"> Calendar </a>
+  </div>
+  
+  <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Agregar</button>
+    <table class="form form-table">
+      {{ form }}
+      <tr><td colspan="2"><button type="submit" class="btn btn-info right"> Submit </button></td></tr>
+    </table>
   </form>
-
 {% endblock %}
