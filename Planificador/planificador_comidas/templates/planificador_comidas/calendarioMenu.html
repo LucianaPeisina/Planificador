@@ -29,7 +29,7 @@
           <div class="tile row">
               <div class="col-md-3">
                   <div id="external-events">
-                      <h4 class="mb-4">Running Events</h4>
+                      <h4 class="mb-4">Comidas del dia</h4>
                       {% for comida in events_month %}
                         <div class="fc-event">
                             <h3>{{ comida.titulo }}</h3>
@@ -37,7 +37,7 @@
                             <p>To: {{ comida.fin }}</p>
                         </div>
                       {% empty %}
-                        <p>No Running Events Found</p>
+                        <p>Sin comidas encontradas</p>
                       {% endfor %}
                   </div>
               </div>
