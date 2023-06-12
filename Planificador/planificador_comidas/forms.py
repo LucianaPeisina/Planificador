@@ -7,6 +7,7 @@ from django.forms import formset_factory
 from django.contrib import messages
 from .models import Comida, Miembro, Compra, Perfil, ElementoCompra
 
+from django.forms.formsets import BaseFormSet
 from django.contrib.auth.forms import AuthenticationForm
 #from django.contrib.auth import authenticate, login as auth_login
 from django.shortcuts import render, redirect
@@ -115,15 +116,26 @@ class MiembroForm(forms.ModelForm):
             'extra': forms.Textarea(attrs={'class': 'form-control'}),
         }
 
-ComidaMiembroFormSet = formset_factory(MiembroForm, formset=BaseFormSet, extra=1)
-class ComidaForm(forms.ModelForm):
-    miembro = forms.ModelMultipleChoiceField(queryset=Miembro.objects.all(), widget=forms.CheckboxSelectMultiple)
-    extra = forms.CharField(required=False, widget=forms.Textarea(attrs={"class": "form-control", "placeholder": "¿Ingrese cualquier extra"}))
-    miembros_formset = ComidaMiembroFormSet(prefix='miembros')
 
+
+
+
+class ComidaMiembroFormSet(formset_factory(MiembroForm, formset=BaseFormSet, extra=1)):
+    pass
+
+class ComidaForm(forms.ModelForm):
+    extra = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 3, "style": "resize: vertical;"})
+    )
+    miembros = forms.ModelMultipleChoiceField(
+        queryset=Miembro.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
     class Meta:
         model = Comida
-        fields = ['inicio', 'fin', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'miembro', 'extra']
+        fields = ['inicio', 'fin', 'tipo', 'titulo', 'descripcion', 'ingredientes', 'extra']
 
         widgets = {
             "titulo": forms.TextInput(
@@ -133,12 +145,16 @@ class ComidaForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "placeholder": "Introduzca una descripción",
+                    "rows": 3,
+                    "style": "resize: vertical;",
                 }
             ),
             "ingredientes": forms.Textarea(
                 attrs={
                     "class": "form-control",
                     "placeholder": "Introduzca los ingredientes",
+                    "rows": 3,
+                    "style": "resize: vertical;",
                 }
             ),
             "inicio": DateInput(
@@ -150,12 +166,6 @@ class ComidaForm(forms.ModelForm):
                 format="%Y-%m-%dT%H:%M",
             ),
             "tipo": forms.Select(attrs={"class": "form-control"}),
-            "extra": forms.Textarea(
-                attrs={
-                    "class": "form-control",
-                    "placeholder": "Introduzca cualquier extra",
-                }
-            ),
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -166,13 +176,12 @@ class ComidaForm(forms.ModelForm):
         self.instance.usuario = user
 
         # Filtrar los objetos Miembro disponibles para el usuario actual
-        self.fields['miembro'].queryset = Miembro.objects.filter(usuario=user)
-
-
+        self.fields['miembros'].queryset = Miembro.objects.filter(usuario=user)
 
         if self.instance.pk:
             # Si se está editando una comida existente, se preseleccionan los miembros asociados
-            self.fields['miembro'].initial = self.instance.miembro.all()
+            self.fields['miembros'].initial = self.instance.miembros.all()
+
 
         # Se muestra el campo extra si la comida está marcada como "extra"
         if self.instance.extra:
@@ -183,15 +192,14 @@ class ComidaForm(forms.ModelForm):
     def save(self, commit=True):
         comida = super().save(commit=False)
 
-        # Actualizar la relación muchos a muchos con los miembros seleccionados
         if commit:
             comida.save()
-            comida.miembros.set(self.cleaned_data['miembros_formset'])
 
+        # Guardar los miembros asociados a la comida
+        if self.cleaned_data.get('miembros'):
+            comida.miembros.set(self.cleaned_data['miembros'])
 
         return comida
-
-
 
 class ElementoCompraForm(forms.ModelForm):
     class Meta:

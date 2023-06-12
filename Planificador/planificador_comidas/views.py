@@ -16,7 +16,7 @@ from datetime import timedelta
 
 from planificador_comidas.utils import Calendar
 #from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, LoginForm, PerfilForm
-from .forms import ComidaForm, MiembroForm, CompraForm, ElementoCompraForm, PerfilForm
+from .forms import ComidaForm, ComidaMiembroFormSet, MiembroForm, CompraForm, ElementoCompraForm, PerfilForm
 from .models import Comida, Miembro, Compra, ElementoCompra, Perfil
 
 from django.contrib import messages
@@ -339,6 +339,7 @@ class CalendarViewNew(generic.View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class(user=request.user, initial={'usuario': request.user})
+        miembros_formset = ComidaMiembroFormSet(prefix='miembros')
 
         comidas = Comida.objects.get_all_events(user=request.user)
         events_month = Comida.objects.get_running_events(user=request.user)
@@ -353,6 +354,7 @@ class CalendarViewNew(generic.View):
             )
         context = {
             "form": form,
+            "miembros_formset": miembros_formset,
             "comidas": event_list,
             "events_month": events_month,
         }
@@ -365,9 +367,10 @@ class CalendarViewNew(generic.View):
             comida = form.save(commit=False)
             comida.user = request.user
             comida.save()
-            return render(request, self.template_name)
+            return redirect('calendarioMenu')
 
         context = {"form": form}
         return render(request, self.template_name, context)
+
 
 
