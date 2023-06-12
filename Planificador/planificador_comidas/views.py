@@ -97,15 +97,19 @@ def perfil(request):
     perfil = request.user.perfil
     return render(request, 'planificador_comidas/perfil/perfil.html', {'perfil': perfil})
 
-#@login_required
+@login_required(login_url='/planificador_comidas/login')
 def listado_perfiles(request):
-    context = {}
+    if request.user.is_superuser:
+        context = {}
 
-    listado = Perfil.objects.all().order_by('id')
+        listado = Perfil.objects.all().order_by('id')
 
-    context['listado_perfiles'] = listado
+        context['listado_perfiles'] = listado
 
-    return render(request, 'planificador_comidas/perfil/listado_perfiles.html', context)
+        return render(request, 'planificador_comidas/perfil/listado_perfiles.html', context)
+    else:
+        messages.error(request, 'Lo siento, no tienes permiso de acceso.')
+        return redirect('index')
 
 
 
